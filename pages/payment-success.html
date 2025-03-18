@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - NeuraLeap</title>
+    <meta name="description" content="Your payment has been successfully processed">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/animations.css" rel="stylesheet">
+</head>
+<body class="bg-dark-bg text-white min-h-screen flex flex-col">
+    <!-- Neural network background -->
+    <div class="neural-bg"></div>
+    <div class="tech-lines-bg"></div>
+    
+    <!-- Header navigation -->
+    <div id="header-container"></div>
+
+    <!-- Main content -->
+    <main class="flex-grow pt-24 pb-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-dark-card rounded-xl shadow-glow p-8 mb-8 text-center">
+                <div class="success-animation mb-6">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+                
+                <h1 class="text-4xl font-bold mb-4">
+                    <span class="neon-text">Payment Successful!</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-8">Thank you for your purchase. Your transaction has been completed successfully.</p>
+                
+                <div id="payment-details" class="max-w-lg mx-auto bg-dark-bg rounded-lg p-6 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">Transaction Details</h2>
+                    <div class="space-y-4 text-left">
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Transaction ID:</span>
+                            <span id="transaction-id">TXN123456789</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Date:</span>
+                            <span id="transaction-date">August 15, 2023</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Amount:</span>
+                            <span id="transaction-amount">A$799.00</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-700">
+                            <span class="text-gray-400">Payment Method:</span>
+                            <span id="payment-method">Credit Card</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="what-next mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">What's Next?</h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-dark-bg rounded-lg">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-cyan-900 mx-auto mb-3">
+                                <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Check Your Email</h3>
+                            <p class="text-gray-400">You'll receive a confirmation email with your receipt and course access details.</p>
+                        </div>
+                        <div class="p-4 bg-dark-bg rounded-lg">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-cyan-900 mx-auto mb-3">
+                                <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Access Your Course</h3>
+                            <p class="text-gray-400">Log in to your dashboard to start learning and access your course materials.</p>
+                        </div>
+                        <div class="p-4 bg-dark-bg rounded-lg">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-cyan-900 mx-auto mb-3">
+                                <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Join Our Community</h3>
+                            <p class="text-gray-400">Connect with fellow learners in our online community to enhance your learning journey.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="/pages/dashboard/index.html" class="primary-button text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                        Go to Dashboard <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="/pages/courses/index.html" class="neon-button px-6 py-3 rounded-lg flex items-center justify-center">
+                        Explore More Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            fetch('/components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                    if (window.initializeHeader) {
+                        window.initializeHeader();
+                    }
+                });
+            
+            fetch('/components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                });
+            
+            // Get transaction details from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const transactionId = urlParams.get('transaction') || 'TXN123456789';
+            
+            // Update transaction details
+            document.getElementById('transaction-id').textContent = transactionId;
+            document.getElementById('transaction-date').textContent = new Date().toLocaleDateString('en-AU', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Other customizations based on URL parameters could be added here
+        });
+    </script>
+    
+    <style>
+        /* Success animation */
+        .success-animation {
+            margin: 0 auto;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #4BB543;
+            stroke-miterlimit: 10;
+            box-shadow: 0 0 20px #4BB543;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #4BB543;
+            fill: none;
+            animation: stroke .6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke .3s cubic-bezier(0.65, 0, 0.45, 1) .8s forwards;
+        }
+        
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+        
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px rgba(75, 181, 67, 0.1);
+            }
+        }
+    </style>
+</body>
+</html> 

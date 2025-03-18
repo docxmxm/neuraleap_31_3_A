@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile | Neural Leap Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    
+    <!-- Supabase JS Client - Required for database operations -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    
+    <!-- Components Script -->
+    <script src="/js/components.js"></script>
+    
+    <style>
+        /* Form Controls Styling */
+        .form-control {
+            background-color: #1f2937;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:disabled {
+            cursor: not-allowed;
+            opacity: 0.75;
+            background-color: rgba(31, 41, 55, 0.4);
+        }
+        
+        .form-control:not(:disabled):focus {
+            outline: none;
+            border-color: rgba(6, 182, 212, 0.7);
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+        }
+        
+        /* Tag styling */
+        .tag-item {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        
+        .tag-item:hover {
+            transform: translateY(-1px);
+        }
+        
+        .tag-option {
+            cursor: pointer;
+            display: inline-block;
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .tag-option:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .tags-container {
+            min-height: 2rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            background-color: rgba(31, 41, 55, 0.4);
+        }
+        
+        .remove-tag {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-tag:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Notification dot and count */
+        .notification-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 8px;
+            width: 8px;
+            background-color: #06b6d4;
+            border-radius: 50%;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            height: 18px;
+            min-width: 18px;
+            background-color: #06b6d4;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+        
+        /* User menu styling */
+        .user-menu-name {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .user-menu-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-menu-button {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            max-width: 300px;
+        }
+        
+        /* Header layout fixes */
+        .top-header {
+            width: 100%;
+            position: relative;
+        }
+        
+        /* Fix for mobile views */
+        @media (max-width: 640px) {
+            .user-menu-container {
+                max-width: 160px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 border-r border-gray-800">
+                <div class="flex items-center justify-center h-16 px-4 border-b border-gray-800">
+                    <a href="/index.html" class="flex items-center space-x-2">
+                        <div class="relative h-8 w-8 flex items-center justify-center">
+                            <div class="absolute inset-0 bg-cyan-500 opacity-20 rounded-lg filter blur-sm"></div>
+                            <div class="relative z-10 text-cyan-400 font-bold text-lg">N</div>
+                        </div>
+                        <span class="text-white font-bold text-lg tracking-tight">Neura<span class="neon-text">Leap</span></span>
+                    </a>
+                </div>
+
+                <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                    <nav class="mt-5 flex-1 px-4 space-y-3">
+                        <a href="/pages/dashboard/index.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+
+                        <a href="/pages/dashboard/notifications.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                            Notifications
+                        </a>
+
+                        <a href="/pages/dashboard/surveys.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            Surveys
+                        </a>
+                        
+                        <a href="/pages/dashboard/profile.html" class="flex items-center px-4 py-3 text-cyan-400 bg-dark-card rounded-lg group">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Profile
+                        </a>
+
+                        <a href="/pages/dashboard/settings.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Settings
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navigation -->
+            <div class="flex-shrink-0">
+                <div class="flex items-center justify-between h-16 px-6 bg-dark-card border-b border-gray-800 top-header">
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden text-gray-400 hover:text-white">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Page Title -->
+                    <h1 class="text-xl font-semibold text-white">Profile</h1>
+                    
+                    <!-- User Menu -->
+                    <div class="flex items-center">
+                        <a href="/pages/dashboard/notifications.html" class="text-gray-400 hover:text-cyan-400 focus:outline-none p-2 relative mr-2">
+                            <span class="sr-only">View notifications</span>
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                            <span class="notification-dot"></span>
+                            <span class="notification-count">0</span>
+                        </a>
+                        <div class="relative user-menu-container">
+                            <button class="flex items-center text-gray-400 hover:text-white focus:outline-none user-menu-button" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                <div class="h-8 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-semibold user-initial">
+                                    A
+                                </div>
+                                <div class="user-menu-text">
+                                    <span class="text-sm font-medium user-menu-name" id="user-name-header">User</span>
+                                </div>
+                                <svg class="ml-1 h-4 w-4 hidden md:block flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="flex-1 overflow-auto p-6">
+                <div class="card-bg p-6 rounded-xl shadow-xl mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">My <span class="neon-text">Profile</span></h2>
+                        <div>
+                            <button id="edit-profile-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                    </svg>
+                                Edit Profile
+                                </button>
+                            <button id="save-profile-btn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
+                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                                Save Changes
+                        </button>
+                            <button id="cancel-edit-btn" class="hidden bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg ml-2 flex items-center">
+                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                                Cancel
+                        </button>
+                    </div>
+                </div>
+
+                    <div id="loading-indicator" class="text-center py-8">
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-cyan-500 mb-4"></div>
+                        <p class="text-cyan-400">Loading your profile data...</p>
+                    </div>
+                    
+                    <form id="profile-form" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                            <label class="block text-sm font-medium text-gray-400 mb-2">First Name</label>
+                                <input type="text" id="first-name" class="form-control" disabled>
+                                        </div>
+                            <div>
+                                            <label class="block text-sm font-medium text-gray-400 mb-2">Last Name</label>
+                                <input type="text" id="last-name" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Username</label>
+                                <input type="text" id="username" class="form-control" disabled>
+                            </div>
+                            <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                                <input type="email" id="email" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Bio</label>
+                            <textarea id="bio" class="form-control" rows="4" disabled></textarea>
+                                </div>
+                                
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                        <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Title</label>
+                                <input type="text" id="title" class="form-control" placeholder="e.g., Software Engineer" disabled>
+                                        </div>
+                                        <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Company</label>
+                                <input type="text" id="company" class="form-control" placeholder="e.g., Tech Company" disabled>
+                                        </div>
+                                    </div>
+                                    
+                        <div class="mb-6">
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">University</label>
+                                        <select id="university" class="form-control" disabled>
+                                            <option value="">Select your university</option>
+                                <option value="Australian Catholic University">Australian Catholic University</option>
+                                <option value="Australian National University">Australian National University</option>
+                                <option value="Bond University">Bond University</option>
+                                <option value="Carnegie Mellon University Australia">Carnegie Mellon University Australia</option>
+                                <option value="Central Queensland University">Central Queensland University</option>
+                                <option value="Charles Darwin University">Charles Darwin University</option>
+                                <option value="Charles Sturt University">Charles Sturt University</option>
+                                <option value="Curtin University">Curtin University</option>
+                                                <option value="Deakin University">Deakin University</option>
+                                <option value="Edith Cowan University">Edith Cowan University</option>
+                                <option value="Federation University Australia">Federation University Australia</option>
+                                <option value="Flinders University">Flinders University</option>
+                                                <option value="Griffith University">Griffith University</option>
+                                                <option value="James Cook University">James Cook University</option>
+                                <option value="La Trobe University">La Trobe University</option>
+                                <option value="Macquarie University">Macquarie University</option>
+                                <option value="Monash University">Monash University</option>
+                                                <option value="Murdoch University">Murdoch University</option>
+                                <option value="Queensland University of Technology">Queensland University of Technology</option>
+                                <option value="RMIT University">RMIT University</option>
+                                <option value="Southern Cross University">Southern Cross University</option>
+                                <option value="Swinburne University of Technology">Swinburne University of Technology</option>
+                                <option value="Torrens University Australia">Torrens University Australia</option>
+                                                <option value="University of Adelaide">University of Adelaide</option>
+                                <option value="University of Canberra">University of Canberra</option>
+                                <option value="University of Divinity">University of Divinity</option>
+                                <option value="University of Melbourne">University of Melbourne</option>
+                                <option value="University of New England">University of New England</option>
+                                <option value="University of New South Wales">University of New South Wales</option>
+                                <option value="University of Newcastle">University of Newcastle</option>
+                                <option value="University of Notre Dame Australia">University of Notre Dame Australia</option>
+                                <option value="University of Queensland">University of Queensland</option>
+                                                <option value="University of South Australia">University of South Australia</option>
+                                <option value="University of Southern Queensland">University of Southern Queensland</option>
+                                <option value="University of Sydney">University of Sydney</option>
+                                                <option value="University of Tasmania">University of Tasmania</option>
+                                <option value="University of Technology Sydney">University of Technology Sydney</option>
+                                <option value="University of the Sunshine Coast">University of the Sunshine Coast</option>
+                                <option value="University of Western Australia">University of Western Australia</option>
+                                <option value="University of Wollongong">University of Wollongong</option>
+                                <option value="Victoria University">Victoria University</option>
+                                <option value="Western Sydney University">Western Sydney University</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Academic Level</label>
+                            <select id="academic-level" class="form-control" disabled>
+                                <option value="">Select your academic level</option>
+                                <option value="High School Student">High School Student</option>
+                                <option value="Undergraduate Student">Undergraduate Student</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Student">Master's Student</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD Candidate">PhD Candidate</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Postdoctoral Researcher">Postdoctoral Researcher</option>
+                                <option value="Professor">Professor</option>
+                                <option value="Other">Other</option>
+                            </select>
+                                </div>
+                                
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Programming Languages</label>
+                            
+                            <div id="programming-tags-container" class="tags-container">
+                                <span class="text-gray-500 text-sm empty-message">No programming languages selected yet</span>
+                                    </div>
+                            
+                            <div id="programming-options" class="hidden mt-3">
+                                <span class="tag-option" data-tag="Python">Python</span>
+                                <span class="tag-option" data-tag="JavaScript">JavaScript</span>
+                                <span class="tag-option" data-tag="TypeScript">TypeScript</span>
+                                <span class="tag-option" data-tag="Java">Java</span>
+                                <span class="tag-option" data-tag="C++">C++</span>
+                                <span class="tag-option" data-tag="C#">C#</span>
+                                <span class="tag-option" data-tag="Ruby">Ruby</span>
+                                <span class="tag-option" data-tag="Go">Go</span>
+                                <span class="tag-option" data-tag="Rust">Rust</span>
+                                <span class="tag-option" data-tag="PHP">PHP</span>
+                            </div>
+                            
+                            <div class="mt-3 hidden" id="custom-language-input">
+                                <input type="text" id="custom-language" class="form-control w-64 inline-block" placeholder="Add custom language">
+                                <button type="button" id="add-language-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded ml-2">Add</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    <div id="status-message" class="hidden mt-4 p-3 rounded"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isEditMode = false;
+        let userData = {};
+        let originalData = {};
+        
+        // DOM Elements
+        const profileForm = document.getElementById('profile-form');
+        const loadingIndicator = document.getElementById('loading-indicator');
+                const editBtn = document.getElementById('edit-profile-btn');
+        const saveBtn = document.getElementById('save-profile-btn');
+        const cancelBtn = document.getElementById('cancel-edit-btn');
+        const statusMessage = document.getElementById('status-message');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if Supabase client is available
+            if (!window.supabaseClient) {
+                showStatus('Supabase client not initialized. Please check your configuration.', 'error');
+                return;
+            }
+            
+            try {
+                await loadUserProfile();
+                setupEventListeners();
+            } catch (error) {
+                showStatus('Failed to initialize profile page: ' + error.message, 'error');
+            }
+        });
+
+        // Load user profile from Supabase
+        async function loadUserProfile() {
+            try {
+                const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
+                
+                if (authError || !user) {
+                    throw new Error('You must be logged in to view this page');
+                }
+                
+                const { data, error } = await window.supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                // Store user data
+                        userData = {
+                    id: user.id,
+                            email: user.email,
+                    ...data
+                        };
+                        
+                // Save original copy for potential reset
+                        originalData = JSON.parse(JSON.stringify(userData));
+                
+                // Populate form
+                populateForm(userData);
+                
+                // Update user initial in header
+                updateUserInitial(userData);
+                
+                // Show form, hide loading
+                loadingIndicator.classList.add('hidden');
+                profileForm.classList.remove('hidden');
+                
+            } catch (error) {
+                showStatus('Failed to load profile: ' + error.message, 'error');
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Edit button
+            editBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleEditMode(true);
+            });
+            
+            // Save button
+            saveBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                await saveProfile();
+            });
+            
+            // Cancel button
+            cancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleEditMode(false);
+                resetForm();
+            });
+            
+            // Language tag options
+            document.querySelectorAll('.tag-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    if (isEditMode) {
+                        const tag = this.getAttribute('data-tag');
+                        addLanguageTag(tag);
+                    }
+                });
+            });
+            
+            // Add custom language
+            document.getElementById('add-language-btn').addEventListener('click', function() {
+                const input = document.getElementById('custom-language');
+                const value = input.value.trim();
+                
+                if (value) {
+                    addLanguageTag(value);
+                    input.value = '';
+                }
+            });
+        }
+
+        // Toggle edit mode
+        function toggleEditMode(enabled) {
+            isEditMode = enabled;
+            
+            // Toggle form controls
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(control => {
+                if (control.id !== 'email') {
+                    control.disabled = !isEditMode;
+                }
+            });
+            
+            // Toggle buttons
+            editBtn.classList.toggle('hidden', isEditMode);
+            saveBtn.classList.toggle('hidden', !isEditMode);
+            cancelBtn.classList.toggle('hidden', !isEditMode);
+            
+            // Toggle programming options
+            document.getElementById('programming-options').classList.toggle('hidden', !isEditMode);
+            document.getElementById('custom-language-input').classList.toggle('hidden', !isEditMode);
+            
+            // Show/hide remove buttons on tags
+            document.querySelectorAll('.remove-tag').forEach(btn => {
+                btn.style.display = isEditMode ? 'inline' : 'none';
+            });
+        }
+
+        // Populate form with user data
+        function populateForm(data) {
+            // Basic fields
+            document.getElementById('first-name').value = data.first_name || '';
+            document.getElementById('last-name').value = data.last_name || '';
+            document.getElementById('username').value = data.username || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('bio').value = data.bio || '';
+            document.getElementById('title').value = data.title || '';
+            document.getElementById('company').value = data.company || '';
+            document.getElementById('university').value = data.university || '';
+            document.getElementById('academic-level').value = data.academic_level || '';
+            
+            // Programming languages
+            const tagsContainer = document.getElementById('programming-tags-container');
+            tagsContainer.innerHTML = '';
+            
+            if (data.languages && Array.isArray(data.languages) && data.languages.length > 0) {
+                data.languages.forEach(lang => {
+                    addLanguageTag(lang, false);
+                });
+            } else {
+                tagsContainer.innerHTML = '<span class="text-gray-500 text-sm empty-message">No programming languages selected yet</span>';
+            }
+        }
+
+        // Add a language tag
+        function addLanguageTag(tag, isNew = true) {
+            // Don't proceed if not in edit mode and this is a new tag
+            if (!isEditMode && isNew) {
+                return;
+            }
+            
+            const container = document.getElementById('programming-tags-container');
+            
+            // Remove empty message if it exists
+            const emptyMessage = container.querySelector('.empty-message');
+            if (emptyMessage) {
+                emptyMessage.remove();
+            }
+            
+            // Check if tag already exists
+            const existingTags = Array.from(container.querySelectorAll('.tag-item')).map(
+                item => item.getAttribute('data-tag')
+            );
+            
+            if (existingTags.includes(tag)) {
+                return;
+            }
+            
+            // Create tag element
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag-item';
+            tagElement.setAttribute('data-tag', tag);
+            tagElement.innerHTML = `${tag} <span class="remove-tag" style="display: ${isEditMode ? 'inline' : 'none'}">×</span>`;
+            
+            // Add click handler to remove button
+            const removeBtn = tagElement.querySelector('.remove-tag');
+                removeBtn.addEventListener('click', function() {
+                    tagElement.remove();
+                
+                // Add empty message if no tags
+                    if (container.children.length === 0) {
+                    container.innerHTML = '<span class="text-gray-500 text-sm empty-message">No programming languages selected yet</span>';
+                }
+            });
+            
+            // Add to container
+            container.appendChild(tagElement);
+        }
+
+        // Reset form to original data
+        function resetForm() {
+            populateForm(originalData);
+        }
+
+        // Save profile
+        async function saveProfile() {
+            try {
+                showStatus('Saving changes...', 'info');
+                
+                // Get current values
+                const formData = {
+                    first_name: document.getElementById('first-name').value,
+                    last_name: document.getElementById('last-name').value,
+                    username: document.getElementById('username').value,
+                    bio: document.getElementById('bio').value,
+                    title: document.getElementById('title').value,
+                    company: document.getElementById('company').value,
+                    university: document.getElementById('university').value,
+                    academic_level: document.getElementById('academic-level').value,
+                    languages: getLanguageTags(),
+                    updated_at: new Date().toISOString()
+                };
+                
+                // Update profile in Supabase
+                const { data, error } = await window.supabaseClient
+                        .from('profiles')
+                        .update(formData)
+                    .eq('id', userData.id)
+                        .select();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                // Update local data
+                userData = {
+                    ...userData,
+                    ...formData
+                };
+                
+                // Update original data for potential reset
+                originalData = JSON.parse(JSON.stringify(userData));
+                
+                // Update user initial in header
+                updateUserInitial(userData);
+                
+                // Exit edit mode
+                toggleEditMode(false);
+                
+                showStatus('Profile updated successfully!', 'success');
+                    setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                    }, 3000);
+                
+            } catch (error) {
+                showStatus('Error saving profile: ' + error.message, 'error');
+            }
+        }
+
+        // Get all language tags
+        function getLanguageTags() {
+            const container = document.getElementById('programming-tags-container');
+            const tags = Array.from(container.querySelectorAll('.tag-item')).map(
+                item => item.getAttribute('data-tag')
+            );
+            return tags;
+        }
+
+        // Update user initial in header
+        function updateUserInitial(data) {
+            const userInitial = document.querySelector('.user-initial');
+            const userName = document.getElementById('user-name-header');
+            
+            if (userInitial && userName && data) {
+                // Get first character of first name or last name or email
+                const initial = (data.first_name || data.last_name || data.email || 'U').charAt(0).toUpperCase();
+                userInitial.textContent = initial;
+                
+                // Set user name
+                const displayName = data.first_name && data.last_name 
+                    ? `${data.first_name} ${data.last_name}`
+                    : (data.first_name || data.last_name || data.username || data.email || 'User');
+                userName.textContent = displayName;
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `mt-4 p-3 rounded`;
+            
+            switch (type) {
+                case 'success':
+                    statusMessage.classList.add('bg-green-800', 'text-green-100');
+                    break;
+                case 'error':
+                    statusMessage.classList.add('bg-red-800', 'text-red-100');
+                    break;
+                default:
+                    statusMessage.classList.add('bg-blue-800', 'text-blue-100');
+                    break;
+            }
+            
+            statusMessage.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

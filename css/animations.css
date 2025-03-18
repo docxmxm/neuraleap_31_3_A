@@ -1,0 +1,668 @@
+/* Animations CSS for NeuraLeap */
+
+/* Particle animation */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    background-color: rgba(0, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: float 15s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateY(-100px) translateX(30px);
+        opacity: 0.4;
+    }
+}
+
+/* Neural network animation */
+.neural-network {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.node {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--neon-blue);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-blue);
+    animation: pulse 3s infinite alternate;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* Connection lines animation */
+.connection {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    transform-origin: left center;
+    animation: glow 4s infinite alternate;
+    z-index: -1;
+}
+
+@keyframes glow {
+    0%, 100% {
+        opacity: 0.1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Hover animations */
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+/* Fade-in animation */
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Typing cursor animation */
+.typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background-color: var(--neon-blue);
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* 新增霓虹灯效果 */
+
+/* 霓虹脉冲容器 */
+.neon-pulse-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* 霓虹脉冲效果 */
+.neon-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    pointer-events: none;
+}
+
+.neon-pulse-1 {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.7) 0%, rgba(6, 182, 212, 0) 70%);
+    animation: pulse-beat 4s infinite alternate, color-shift 8s infinite;
+}
+
+.neon-pulse-2 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.5) 0%, rgba(124, 58, 237, 0) 70%);
+    animation: pulse-beat 6s infinite alternate-reverse, color-shift 12s infinite 2s;
+}
+
+.neon-pulse-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, rgba(236, 72, 153, 0) 70%);
+    animation: pulse-beat 8s infinite ease-in-out, color-shift 15s infinite 4s;
+}
+
+@keyframes pulse-beat {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+@keyframes color-shift {
+    0%, 100% {
+        filter: hue-rotate(0deg);
+    }
+    33% {
+        filter: hue-rotate(120deg);
+    }
+    66% {
+        filter: hue-rotate(240deg);
+    }
+}
+
+/* 霓虹线条 */
+.neon-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.neon-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    transform-origin: center;
+    opacity: 0;
+    animation: neon-line-appear 8s infinite ease-in-out;
+}
+
+.neon-line-1 {
+    top: 30%;
+    left: 10%;
+    width: 80%;
+    transform: rotate(30deg);
+    animation-delay: 0s;
+}
+
+.neon-line-2 {
+    top: 50%;
+    left: 20%;
+    width: 60%;
+    transform: rotate(-20deg);
+    animation-delay: 2s;
+}
+
+.neon-line-3 {
+    top: 70%;
+    left: 15%;
+    width: 70%;
+    transform: rotate(10deg);
+    animation-delay: 4s;
+}
+
+.neon-line-4 {
+    top: 40%;
+    left: 25%;
+    width: 50%;
+    transform: rotate(-45deg);
+    animation-delay: 6s;
+}
+
+@keyframes neon-line-appear {
+    0%, 100% {
+        opacity: 0;
+        box-shadow: 0 0 0px var(--neon-blue);
+    }
+    10%, 90% {
+        opacity: 0.7;
+        box-shadow: 0 0 10px var(--neon-blue);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 20px var(--neon-blue);
+    }
+}
+
+/* 霓虹节点 */
+.neon-nodes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.neon-node {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+    animation: neon-node-pulse 3s infinite alternate ease-in-out;
+}
+
+.neon-node-1 {
+    top: 20%;
+    left: 30%;
+    animation-delay: 0s;
+}
+
+.neon-node-2 {
+    top: 30%;
+    left: 70%;
+    animation-delay: 0.5s;
+}
+
+.neon-node-3 {
+    top: 50%;
+    left: 20%;
+    animation-delay: 1s;
+}
+
+.neon-node-4 {
+    top: 60%;
+    left: 60%;
+    animation-delay: 1.5s;
+}
+
+.neon-node-5 {
+    top: 75%;
+    left: 40%;
+    animation-delay: 2s;
+}
+
+.neon-node-6 {
+    top: 40%;
+    left: 80%;
+    animation-delay: 2.5s;
+}
+
+.neon-node-7 {
+    top: 80%;
+    left: 75%;
+    animation-delay: 3s;
+}
+
+@keyframes neon-node-pulse {
+    0%, 100% {
+        transform: scale(0.5);
+        opacity: 0.3;
+        box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+    }
+    50% {
+        transform: scale(2);
+        opacity: 1;
+        box-shadow: 0 0 10px var(--neon-blue), 0 0 30px var(--neon-blue);
+    }
+}
+
+/* 节点连接动画 */
+@keyframes flow-line {
+    0% {
+        background-position: 0% 50%;
+        opacity: 0.3;
+    }
+    50% {
+        background-position: 100% 50%;
+        opacity: 1;
+    }
+    100% {
+        background-position: 0% 50%;
+        opacity: 0.3;
+    }
+}
+
+/* 霓虹连接线 */
+.neon-connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.neon-connection {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.8), rgba(6, 182, 212, 0.2));
+    background-size: 200% 100%;
+    transform-origin: left center;
+    animation: flow-line 4s infinite linear;
+    z-index: 1;
+    opacity: 0.6;
+    box-shadow: 0 0 8px var(--neon-blue);
+}
+
+.neon-connection-1 { animation-delay: 0s; }
+.neon-connection-2 { animation-delay: 0.5s; }
+.neon-connection-3 { animation-delay: 1s; }
+.neon-connection-4 { animation-delay: 1.5s; }
+.neon-connection-5 { animation-delay: 2s; }
+.neon-connection-6 { animation-delay: 2.5s; }
+.neon-connection-7 { animation-delay: 3s; }
+.neon-connection-8 { animation-delay: 3.5s; }
+
+/* 霓虹流光效果 */
+.neural-network::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+        rgba(6, 182, 212, 0) 0%, 
+        rgba(6, 182, 212, 0.1) 50%, 
+        rgba(6, 182, 212, 0) 100%);
+    background-size: 200% 200%;
+    filter: blur(10px);
+    animation: flow-gradient 8s infinite linear;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.neural-network::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        rgba(124, 58, 237, 0) 0%, 
+        rgba(124, 58, 237, 0.05) 50%, 
+        rgba(124, 58, 237, 0) 100%);
+    filter: blur(15px);
+    animation: pulse-slow 10s infinite ease-in-out;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+@keyframes flow-gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 200% 200%;
+    }
+}
+
+@keyframes pulse-slow {
+    0%, 100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+}
+
+/* 闪烁星点 */
+.twinkle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle-animation 4s infinite;
+}
+
+.twinkle-1 {
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.twinkle-2 {
+    top: 25%;
+    left: 85%;
+    animation-delay: 0.5s;
+}
+
+.twinkle-3 {
+    top: 80%;
+    left: 30%;
+    animation-delay: 1s;
+}
+
+.twinkle-4 {
+    top: 55%;
+    left: 90%;
+    animation-delay: 1.5s;
+}
+
+.twinkle-5 {
+    top: 90%;
+    left: 10%;
+    animation-delay: 2s;
+}
+
+@keyframes twinkle-animation {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0.5);
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(2);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(6, 182, 212, 0.5);
+    }
+}
+
+/* N letter designer styles */
+.designer-n {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    z-index: 5;
+}
+
+.designer-n-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    font-size: 180px;
+    font-weight: 900;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(6, 182, 212, 0.8);
+    text-shadow: 
+        0 0 10px rgba(6, 182, 212, 0.8),
+        0 0 20px rgba(6, 182, 212, 0.5),
+        0 0 30px rgba(6, 182, 212, 0.3);
+    transform: skewX(-5deg);
+}
+
+.designer-n-shape::after {
+    content: '';
+}
+
+.designer-n-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(6, 182, 212, 0.4) 0%,
+        rgba(6, 182, 212, 0.2) 40%,
+        rgba(6, 182, 212, 0) 80%
+    );
+    filter: blur(20px);
+    animation: pulse-slow 4s infinite alternate;
+    z-index: -1;
+}
+
+.designer-n-flicker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    font-size: 180px;
+    font-weight: 900;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 10px rgba(6, 182, 212, 1);
+    opacity: 0;
+    transform: skewX(-5deg);
+    animation: flicker 5s infinite;
+}
+
+.designer-n-flicker::after {
+    content: '';
+}
+
+.designer-n-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    font-size: 180px;
+    font-weight: 900;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    transform: skewX(-5deg);
+    overflow: hidden;
+}
+
+.designer-n-highlight::before {
+    content: 'N';
+    position: absolute;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+}
+
+.designer-n-highlight::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.8) 40%,
+        rgba(255, 255, 255, 0) 80%
+    );
+    border-radius: 50%;
+    filter: blur(2px);
+    box-shadow: 
+        0 0 5px 2px rgba(255, 255, 255, 0.8),
+        0 0 10px 5px rgba(6, 182, 212, 0.6);
+    animation: trace-n-path 5s linear infinite;
+    z-index: 10;
+}
+
+@keyframes trace-n-path {
+    /* Starting at top-left of N */
+    0% {
+        transform: translate(-60px, -70px);
+    }
+    
+    /* Moving down the left vertical stroke */
+    20% {
+        transform: translate(-60px, 70px);
+    }
+    
+    /* Moving along the diagonal stroke */
+    21% {
+        transform: translate(-55px, 65px);
+    }
+    40% {
+        transform: translate(50px, -60px);
+    }
+    
+    /* Moving down the right vertical stroke */
+    41% {
+        transform: translate(60px, -70px);
+    }
+    60% {
+        transform: translate(60px, 70px);
+    }
+    
+    /* Pause at the bottom */
+    65% {
+        transform: translate(60px, 70px);
+    }
+    
+    /* Move back to start with a curve around the bottom */
+    75% {
+        transform: translate(0, 80px);
+    }
+    85% {
+        transform: translate(-60px, 70px);
+    }
+    
+    /* Move back to the top */
+    95% {
+        transform: translate(-60px, -30px);
+    }
+    100% {
+        transform: translate(-60px, -70px);
+    }
+}
+
+@keyframes flicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+        opacity: 0.1;
+    }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+        opacity: 0.8;
+    }
+}

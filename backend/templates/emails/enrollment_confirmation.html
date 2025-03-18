@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4a86e8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .course-info {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .course-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4a86e8;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Enrollment Confirmation</h1>
+    </div>
+    <div class="content">
+        <p>Hello {{ user.first_name|default:user.username }},</p>
+        
+        <p>Congratulations! You have successfully enrolled in the following course:</p>
+        
+        <div class="course-info">
+            {% if course.image %}
+            <img src="{{ site_url }}{{ course.image.url }}" alt="{{ course.name }}" class="course-image">
+            {% endif %}
+            <h2>{{ course.name }}</h2>
+            <p>{{ course.description }}</p>
+            <p><strong>Enrollment Date:</strong> {{ enrollment.enrollment_date|date:"F j, Y" }}</p>
+        </div>
+        
+        <p>You can access your course materials by clicking the button below:</p>
+        
+        <p style="text-align: center;">
+            <a href="{{ site_url }}/courses/{{ course.id }}" class="button">Access Course</a>
+        </p>
+        
+        <p>We hope you enjoy the course and find it valuable for your learning journey. If you have any questions or need assistance with the course material, please don't hesitate to reach out to our support team.</p>
+        
+        <p>Happy learning!</p>
+        
+        <p>Best regards,<br>The NeuralLeap Team</p>
+    </div>
+    <div class="footer">
+        <p>© {% now "Y" %} NeuralLeap. All rights reserved.</p>
+        <p>This email was sent to you because you enrolled in a course on our platform.</p>
+    </div>
+</body>
+</html> 

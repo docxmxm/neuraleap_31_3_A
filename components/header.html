@@ -1,0 +1,373 @@
+<!-- Neuraleap Header Component -->
+<!-- Auth Scripts Loader - Loads all necessary authentication scripts -->
+<script src="/js/auth-scripts-loader.js"></script>
+
+<!-- Direct loading of auth scripts to ensure they're loaded -->
+<script src="/js/secure-session.js"></script>
+<script src="/js/sign-out.js"></script>
+<script src="/js/adaptive-auth-ui.js"></script>
+
+<header class="bg-dark-bg text-white fixed w-full z-50 shadow-lg">
+    <!-- Top flickering line -->
+    <div class="flicker-line"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex-shrink-0 flex items-center">
+                <!-- Updated brand name from Nerual to Neura -->
+                <a href="/index.html" class="logo-n flex items-center">
+                    <div class="logo-bg w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 mr-2 relative overflow-hidden">
+                        <div class="data-flow"></div>
+                        <span class="text-2xl font-bold">N</span>
+                    </div>
+                    <span class="logo-text text-xl font-bold text-white tracking-wide">
+                        <span class="neon-text">Neura</span>leap
+                    </span>
+                </a>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden sm:ml-6 sm:flex space-x-8 items-center">
+                <nav class="desktop-menu">
+                    <a href="/index.html" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">Home</a>
+                    
+                    <!-- Courses Dropdown -->
+                    <div class="dropdown relative inline-block">
+                        <button class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors dropdown-toggle">
+                            Courses
+                            <svg class="h-4 w-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu absolute mt-2 py-2 bg-dark-card rounded-md shadow-xl z-50 min-w-max">
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">All Courses</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Beginner Courses</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Advanced Courses</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Specialized Courses</a>
+                        </div>
+                    </div>
+                    
+                    <a href="/pages/activities" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">Activities</a>
+                    <a href="/pages/partnerships/index.html" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">Partnerships</a>
+                    
+                    <!-- Resources Dropdown (including Blog) -->
+                    <div class="dropdown relative inline-block">
+                        <button class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors dropdown-toggle">
+                            Resources
+                            <svg class="h-4 w-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu absolute mt-2 py-2 bg-dark-card rounded-md shadow-xl z-50 min-w-max">
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Resources & Blog</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">AI Tools</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">FAQ</a>
+                        </div>
+                    </div>
+                    
+                    <a href="/pages/about-us" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">About Us</a>
+                </nav>
+                
+                <!-- Auth UI Container - Will be replaced dynamically by adaptive-auth-ui.js -->
+                <div id="auth-ui-container" class="flex items-center space-x-3">
+                    <!-- Default state (will be replaced by adaptive-auth-ui.js) -->
+                    <a href="/pages/login.html" class="text-cyan-400 hover:text-white transition-colors">Log In</a>
+                    <a href="/pages/register.html" class="neon-button text-sm px-4 py-2 rounded pulse-button">Sign Up</a>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="flex items-center sm:hidden">
+                <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu hidden sm:hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 bg-dark-bg shadow-lg">
+            <a href="/index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">Home</a>
+            
+            <!-- Mobile Courses Dropdown -->
+            <div class="mobile-dropdown">
+                <button class="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">
+                    Courses
+                    <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="mobile-dropdown-menu pl-4 space-y-1 mt-1 hidden">
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">All Courses</a>
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Beginner Courses</a>
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Advanced Courses</a>
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Specialized Courses</a>
+                </div>
+            </div>
+            
+            <a href="/pages/activities" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">Activities</a>
+            <a href="/pages/partnerships/index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">Partnerships</a>
+            
+            <!-- Mobile Resources Dropdown -->
+            <div class="mobile-dropdown">
+                <button class="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">
+                    Resources
+                    <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="mobile-dropdown-menu pl-4 space-y-1 mt-1 hidden">
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Resources & Blog</a>
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">AI Tools</a>
+                    <a href="/pages/coming-soon.html" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">FAQ</a>
+                </div>
+            </div>
+            
+            <a href="/pages/about-us" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">About Us</a>
+            
+            <!-- Mobile Auth UI Container - Will be updated by adaptive-auth-ui.js -->
+            <div class="pt-4 pb-3 border-t border-gray-700" id="mobile-auth-container">
+                <a href="/pages/login.html" class="block w-full text-center text-cyan-400 py-2 text-base font-medium mb-2">Log In</a>
+                <a href="/pages/register.html" class="block w-full text-center neon-button py-2 text-base font-medium">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Spacing to compensate for fixed header -->
+<div class="h-16"></div>
+
+<!-- Custom styles for the adaptive header -->
+<style>
+    /* Auth user button styles */
+    .user-initial {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    
+    /* User dropdown menu transitions */
+    #user-dropdown-menu {
+        transition: opacity 0.2s, transform 0.2s;
+        transform-origin: top right;
+    }
+    
+    #user-dropdown-menu.hidden {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+    }
+    
+    #user-dropdown-menu:not(.hidden) {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    /* Header Navigation Styles */
+    .nav-item {
+        @apply text-gray-300 hover:text-white hover:text-cyan-400 px-3 py-2 text-sm font-medium transition-colors border-b-2 border-transparent hover:border-cyan-400;
+    }
+    
+    .dropdown-item {
+        @apply block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-cyan-400;
+    }
+    
+    .mobile-nav-item {
+        @apply text-gray-300 hover:bg-gray-800 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-medium;
+    }
+    
+    .mobile-dropdown-item {
+        @apply block py-2 text-sm text-gray-300 hover:text-cyan-400;
+    }
+    
+    /* Logo hover effect */
+    .logo-link:hover .neon-text {
+        @apply text-cyan-400 filter drop-shadow-glow;
+    }
+    
+    .logo-link:hover .logo-text {
+        animation: pulse 1.5s infinite;
+    }
+    
+    .logo-n:before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%);
+        border-radius: 12px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .logo-link:hover .logo-n:before {
+        opacity: 1;
+    }
+    
+    /* Enhanced Dropdown Style */
+    .dropdown {
+        position: relative;
+    }
+    
+    .dropdown-toggle {
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 0.5rem;
+        background-color: #1f2937;
+        border-radius: 0.375rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        z-index: 50;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        transition-delay: 0.1s;
+        min-width: 160px;
+    }
+    
+    /* Use a pseudoelement to create a larger hover target area */
+    .dropdown::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 20px; /* Space between nav item and dropdown */
+        background: transparent;
+        opacity: 0;
+    }
+    
+    /* Show dropdown on hover and extend hover time */
+    .dropdown:hover .dropdown-menu,
+    .dropdown-menu:hover,
+    .dropdown:focus-within .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition-delay: 0s;
+    }
+    
+    /* Style dropdown items */
+    .dropdown-item {
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #0c4a6e;
+        color: #06b6d4;
+    }
+    
+    /* Keep menu visible for a moment after hover */
+    .dropdown-menu::after {
+        content: "";
+        position: absolute;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: transparent;
+    }
+    
+    /* Darker background colors for consistency with login/dashboard */
+    .bg-dark-bg {
+        background-color: #111827; /* Darker background */
+    }
+    
+    header.bg-dark-bg {
+        background-color: rgba(17, 24, 39, 0.95); /* Semi-transparent version */
+        backdrop-filter: blur(10px);
+    }
+    
+    .neon-text {
+        color: #06b6d4;
+        text-shadow: 0 0 5px rgba(6, 182, 212, 0.7);
+    }
+    
+    .neon-button {
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+        color: #06b6d4;
+        border: 1px solid rgba(6, 182, 212, 0.5);
+        box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+        transition: all 0.3s ease;
+    }
+    
+    .neon-button:hover {
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%);
+        box-shadow: 0 0 12px rgba(6, 182, 212, 0.7);
+    }
+    
+    /* Flicker line effect */
+    .flicker-line {
+        height: 2px;
+        background: linear-gradient(to right, transparent, #06b6d4, transparent);
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.7;
+        animation: flicker 3s infinite ease-in-out;
+    }
+    
+    @keyframes flicker {
+        0% { opacity: 0; transform: translateX(-100%); }
+        50% { opacity: 0.7; }
+        100% { opacity: 0; transform: translateX(100%); }
+    }
+</style>
+
+<!-- Load the adaptive auth UI script -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // Mobile dropdown toggles
+        const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
+        
+        mobileDropdowns.forEach(function(dropdown) {
+            const button = dropdown.querySelector('button');
+            const menu = dropdown.querySelector('.mobile-dropdown-menu');
+            
+            if (button && menu) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menu.classList.toggle('hidden');
+                    
+                    // Toggle arrow direction
+                    const arrow = button.querySelector('svg');
+                    if (arrow) {
+                        arrow.style.transform = menu.classList.contains('hidden') 
+                            ? 'rotate(0deg)' 
+                            : 'rotate(180deg)';
+                    }
+                });
+            }
+        });
+    });
+    
+    // Add a global function so it can be called externally
+    window.initNeuraLeapHeader = function() {
+        // Empty function as we're using :hover for desktop dropdowns
+        console.log("Header initialized (using CSS :hover for dropdowns)");
+    };
+</script>

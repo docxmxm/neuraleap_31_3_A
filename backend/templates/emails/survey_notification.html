@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Survey Available</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4a86e8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .survey-info {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4a86e8;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>New Survey Available</h1>
+    </div>
+    <div class="content">
+        <p>Hello {{ first_name }},</p>
+        
+        <p>We have a new survey that we'd like you to complete:</p>
+        
+        <div class="survey-info">
+            <h2>{{ survey_title }}</h2>
+            <p>{{ survey_description }}</p>
+        </div>
+        
+        <p>Your feedback is valuable to us and helps us improve our courses and services. The survey should only take a few minutes to complete.</p>
+        
+        <p style="text-align: center;">
+            <a href="{{ site_url }}/surveys/{{ survey.id }}" class="button">Take Survey</a>
+        </p>
+        
+        <p>Thank you for your participation!</p>
+        
+        <p>Best regards,<br>The NeuralLeap Team</p>
+    </div>
+    <div class="footer">
+        <p>© {% now "Y" %} NeuralLeap. All rights reserved.</p>
+        <p>You're receiving this email because you're a registered user of NeuralLeap.</p>
+    </div>
+</body>
+</html> 

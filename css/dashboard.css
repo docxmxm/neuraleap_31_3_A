@@ -1,0 +1,77 @@
+/* Dark Theme Variables */
+:root {
+    --neon-blue: #0ff;
+    --neon-green: #0f9;
+    --neon-purple: #90f;
+    --dark-bg: #0a0a14;
+    --darker-bg: #050510;
+    --dark-card: #12121f;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: #f0f0f0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Neon text effect */
+.neon-text {
+    color: var(--neon-blue);
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+/* Neon button effect */
+.neon-button {
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    transition: all 0.3s ease;
+}
+
+    .neon-button:hover {
+        background-color: var(--neon-blue);
+        color: var(--dark-bg);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    }
+
+/* Card hover animation */
+.card-bg {
+    background-color: var(--dark-card);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+}
+
+    .card-bg:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 255, 255, 0.1);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+/* Neural network animation */
+.neural-network {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.node {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--neon-blue);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-blue);
+    animation: pulse 3s infinite alternate;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}

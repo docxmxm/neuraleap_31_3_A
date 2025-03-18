@@ -1,0 +1,132 @@
+/**
+ * Supabase configuration
+ * Contains all configuration settings for Supabase services used by NeuraLeap
+ */
+
+// Global Supabase config
+window.SupabaseConfig = {
+    // Supabase project URL
+    supabaseUrl: 'https://txggovndoxdybdquopvx.supabase.co',
+    
+    // Supabase anon key (public)
+    supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Z2dvdm5kb3hkeWJkcXVvcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1Nzg3MTMsImV4cCI6MjA1NzE1NDcxM30.p0l-YAdIjq-ICQNRGt5bN6YkrSB4NVDMaBUFYH4fpL4',
+    
+    // Site URL
+    siteUrl: window.location.origin,
+    
+    // Redirect URLs for auth operations
+    redirectUrl: `${window.location.origin}/pages/login.html`,
+    
+    // GitHub OAuth settings
+    githubAuthRedirectUri: `${window.location.origin}`,
+    
+    // Google OAuth settings - UPDATED to match Google Cloud Console configuration
+    googleAuthRedirectUri: `https://txggovndoxdybdquopvx.supabase.co/auth/v1/callback?flowName=GeneralOAuthFlow`,
+    
+    // Verification redirect URL
+    verifyRedirectUrl: `${window.location.origin}/pages/verify-success.html`
+};
+
+// Production configuration
+const PRODUCTION_CONFIG = {
+    supabaseUrl: 'https://txggovndoxdybdquopvx.supabase.co',
+    supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Z2dvdm5kb3hkeWJkcXVvcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1Nzg3MTMsImV4cCI6MjA1NzE1NDcxM30.p0l-YAdIjq-ICQNRGt5bN6YkrSB4NVDMaBUFYH4fpL4',
+    siteUrl: 'https://neuraleap.com.au',
+    redirectUrl: 'https://neuraleap.com.au/pages/login.html',
+    verifyRedirectUrl: 'https://neuraleap.com.au/pages/verify-success.html'
+};
+
+// Development configuration
+const DEV_CONFIG = {
+    supabaseUrl: 'https://txggovndoxdybdquopvx.supabase.co', // Using production for simplicity
+    supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Z2dvdm5kb3hkeWJkcXVvcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1Nzg3MTMsImV4cCI6MjA1NzE1NDcxM30.p0l-YAdIjq-ICQNRGt5bN6YkrSB4NVDMaBUFYH4fpL4',
+    siteUrl: window.location.origin,
+    redirectUrl: `${window.location.origin}/pages/login.html`,
+    verifyRedirectUrl: `${window.location.origin}/pages/verify-success.html`
+};
+
+// Determine environment
+const isProduction = window.location.hostname === 'neuraleap.com.au' || 
+                    window.location.hostname === 'www.neuraleap.com.au';
+
+// Select the appropriate config
+const config = isProduction ? PRODUCTION_CONFIG : DEV_CONFIG;
+
+// Set as a global variable for non-module scripts
+window.SupabaseConfig = config;
+
+// Try exporting for CommonJS modules but don't use ES module export
+try {
+    if (typeof module !== 'undefined') {
+        module.exports = config;
+    }
+} catch (e) {
+    // Ignore error in browser environment
+    console.log('Module exports not available in this environment');
+}
+
+// Function to check if local Supabase is accessible 
+async function checkLocalSupabase() {
+    if (isProduction) return false; // Don't check if in production
+    
+    // Define forceLocalDB value from localStorage
+    const forceLocalDB = localStorage.getItem('forceLocalDB') === 'true';
+    if (forceLocalDB) return true;  // Skip check if we're forcing local
+    
+    try {
+        // Use the DEV_CONFIG for checking local connection
+        const response = await fetch(`${DEV_CONFIG.supabaseUrl}/health`, { 
+            method: 'GET',
+            mode: 'no-cors' // This prevents CORS errors during the check
+        });
+        return true; // If we got here, assume it's working
+    } catch (error) {
+        console.warn('Local Supabase instance not available:', error);
+        return false;
+    }
+}
+
+// Function to force using local Supabase
+function forceUseLocalSupabase() {
+    localStorage.setItem('forceLocalDB', 'true');
+    localStorage.setItem('useProductionDB', 'false');
+    console.log('Forced use of local Supabase. Configuration will be updated on next page load.');
+    return DEV_CONFIG;
+}
+
+// Function to force using production Supabase
+function forceUseProductionSupabase() {
+    localStorage.setItem('forceLocalDB', 'false');
+    localStorage.setItem('useProductionDB', 'true');
+    console.log('Forced use of production Supabase. Configuration will be updated on next page load.');
+    return DEV_CONFIG;
+}
+
+// Function to reset to automatic detection
+function resetSupabaseDetection() {
+    localStorage.removeItem('forceLocalDB');
+    localStorage.removeItem('useProductionDB');
+    console.log('Reset to automatic Supabase detection. Configuration will be updated on next page load.');
+}
+
+// Check if local is available and switch to production if needed
+const forceLocalDB = localStorage.getItem('forceLocalDB') === 'true';
+const useProductionDB = localStorage.getItem('useProductionDB') === 'true';
+
+if (!forceLocalDB) {
+    checkLocalSupabase().then(isLocalAvailable => {
+        if (!isLocalAvailable && !useProductionDB) {
+            console.log('Local Supabase unavailable, switching to production API');
+            window.SupabaseConfig = DEV_CONFIG;
+            localStorage.setItem('useProductionDB', 'true');
+        }
+    });
+}
+
+// Add helper functions to global scope
+window.SupabaseConfigHelpers = {
+    forceUseLocalSupabase,
+    forceUseProductionSupabase,
+    resetSupabaseDetection,
+    getCurrentConfig: () => config
+}; 

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraLeap - Activities</title>
+    <meta name="description" content="Explore NeuraLeap's teaching sessions, workshops, and events at universities and organizations around the world.">
+    <meta name="keywords" content="NeuraLeap, AI learning, workshops, events, AI education, activities">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/animations.css" rel="stylesheet">
+    
+    <!-- 确保字体一致性的额外样式 -->
+    <style>
+        body, h1, h2, h3, h4, h5, h6, p, a, button, input, select, textarea {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .nav-item, .dropdown-item {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-200">
+    <!-- Neural network background -->
+    <div class="neural-bg"></div>
+    <div class="tech-lines-bg"></div>
+    
+    <!-- Header navigation -->
+    <div id="header-container"></div>
+
+    <!-- Page Header -->
+    <div class="hero-gradient relative py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <h1 class="text-4xl font-bold text-white mb-4">Our <span class="neon-text">Activities</span></h1>
+            <p class="text-xl text-blue-200 max-w-3xl">Explore our teaching sessions, workshops, and events at universities and organizations around the world.</p>
+        </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        <h2 class="text-2xl font-bold text-white mb-8">Upcoming <span class="neon-text">Events</span></h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Event 1 -->
+            <div class="card-bg rounded-xl overflow-hidden group">
+                <div class="relative">
+                    <div class="h-48 bg-gradient-to-r from-blue-900 to-indigo-900 flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                            <svg class="h-64 w-64 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div class="relative z-10 text-center px-6">
+                            <div class="text-white text-3xl font-bold mb-2">UTS</div>
+                            <div class="text-blue-200">University of Technology Sydney</div>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded">
+                        Mar 15
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-white mb-2">Advanced LLM Implementation Workshop</h3>
+
+                    <div class="flex items-center mb-4">
+                        <svg class="h-5 w-5 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-gray-300">UTS Faculty of Engineering and IT, Building 11</span>
+                    </div>
+
+                    <p class="text-gray-400 mb-6">A hands-on workshop for advanced students and faculty on implementing and fine-tuning large language models for research applications.</p>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400 text-sm">9:00 AM - 4:00 PM</span>
+                        <a href="#" class="neon-button px-4 py-2 rounded text-sm">Register</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="card-bg rounded-xl overflow-hidden group">
+                <div class="relative">
+                    <div class="h-48 bg-gradient-to-r from-purple-900 to-indigo-900 flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                            <svg class="h-64 w-64 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div class="relative z-10 text-center px-6">
+                            <div class="text-white text-3xl font-bold mb-2">UNSW</div>
+                            <div class="text-purple-200">University of New South Wales</div>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-4 left-4 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded">
+                        Mar 22
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-white mb-2">AI Safety and Ethics Seminar</h3>
+
+                    <div class="flex items-center mb-4">
+                        <svg class="h-5 w-5 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-gray-300">UNSW Business School, Auditorium</span>
+                    </div>
+
+                    <p class="text-gray-400 mb-6">An interdisciplinary seminar exploring the ethical challenges and safety considerations in developing and deploying large language models.</p>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400 text-sm">2:00 PM - 5:00 PM</span>
+                        <a href="#" class="neon-button px-4 py-2 rounded text-sm">Register</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="card-bg rounded-xl overflow-hidden group">
+                <div class="relative">
+                    <div class="h-48 bg-gradient-to-r from-cyan-900 to-blue-900 flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                            <svg class="h-64 w-64 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="relative z-10 text-center px-6">
+                            <div class="text-white text-3xl font-bold mb-2">Cultivate8</div>
+                            <div class="text-blue-200">Corporate Headquarters</div>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-4 left-4 bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded">
+                        Apr 05
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-white mb-2">Enterprise LLM Integration Masterclass</h3>
+
+                    <div class="flex items-center mb-4">
+                        <svg class="h-5 w-5 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-gray-300">Cultivate8 Innovation Center, Level 12</span>
+                    </div>
+
+                    <p class="text-gray-400 mb-6">A specialized masterclass for technical teams on integrating large language models into existing enterprise systems and workflows.</p>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400 text-sm">10:00 AM - 3:00 PM</span>
+                        <a href="#" class="neon-button px-4 py-2 rounded text-sm">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-16">
+            <a href="#" class="inline-flex items-center text-cyan-400 hover:text-white transition-colors">
+                View All Upcoming Events
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Past Activities Timeline -->
+    <div class="max-w-7xl mx-auto px-6 mb-16">
+        <h2 class="text-2xl font-bold text-white mb-8">Recent <span class="neon-text">Activities</span></h2>
+
+        <div class="relative">
+            <!-- Timeline Axis -->
+            <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-800 transform -translate-x-1/2"></div>
+
+            <!-- Activity 1 -->
+            <div class="relative md:flex mb-12">
+                <div class="hidden md:block absolute left-1/2 top-6 w-6 h-6 rounded-full bg-blue-600 transform -translate-x-1/2 z-10"></div>
+
+                <!-- Left Column (Date) - Visible only on md+ -->
+                <div class="hidden md:block md:w-1/2 pr-8 text-right">
+                    <div class="text-gray-400 mb-1">February 18, 2025</div>
+                    <div class="text-cyan-400 text-sm">University of Sydney</div>
+                </div>
+
+                <!-- Right Column (Content) -->
+                <div class="md:w-1/2 md:pl-8">
+                    <!-- Mobile date - Visible only on small screens -->
+                    <div class="md:hidden text-gray-400 mb-1">February 18, 2025</div>
+                    <div class="md:hidden text-cyan-400 text-sm mb-2">University of Sydney</div>
+
+                    <div class="card-bg rounded-xl overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-blue-900 to-indigo-900 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <img src="https://via.placeholder.com/800x400" alt="Workshop at University of Sydney" class="object-cover w-full h-full opacity-40">
+                                <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-indigo-900 opacity-60"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <h3 class="text-white text-2xl font-bold text-center px-4">AI Safety for Computer Science Students</h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <p class="text-gray-300 mb-4">Our team conducted a full-day workshop introducing AI safety principles to over 120 computer science students, covering technical safeguards and ethical considerations in AI development.</p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Workshop</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">AI Safety</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Students</span>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex -space-x-2">
+                                    <div class="h-8 w-8 rounded-full bg-blue-800 flex items-center justify-center text-white text-xs z-30">DR</div>
+                                    <div class="h-8 w-8 rounded-full bg-cyan-800 flex items-center justify-center text-white text-xs z-20">SL</div>
+                                    <div class="h-8 w-8 rounded-full bg-indigo-800 flex items-center justify-center text-white text-xs z-10">JN</div>
+                                </div>
+
+                                <a href="#" class="text-cyan-400 hover:text-white flex items-center transition-colors text-sm">
+                                    View details
+                                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity 2 -->
+            <div class="relative md:flex mb-12">
+                <div class="hidden md:block absolute left-1/2 top-6 w-6 h-6 rounded-full bg-purple-600 transform -translate-x-1/2 z-10"></div>
+
+                <!-- Left Column (Content) -->
+                <div class="md:w-1/2 pr-8">
+                    <!-- Mobile date - Visible only on small screens -->
+                    <div class="md:hidden text-gray-400 mb-1">February 10, 2025</div>
+                    <div class="md:hidden text-cyan-400 text-sm mb-2">RMIT University</div>
+
+                    <div class="card-bg rounded-xl overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-purple-900 to-indigo-900 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <img src="https://via.placeholder.com/800x400" alt="Guest lecture at RMIT" class="object-cover w-full h-full opacity-40">
+                                <div class="absolute inset-0 bg-gradient-to-r from-purple-900 to-indigo-900 opacity-60"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <h3 class="text-white text-2xl font-bold text-center px-4">The Future of LLMs in Creative Industries</h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <p class="text-gray-300 mb-4">Dr. Sarah Lin delivered a guest lecture to design and creative arts students on how large language models are transforming creative processes and content creation.</p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Guest Lecture</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Creative AI</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Design</span>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex -space-x-2">
+                                    <div class="h-8 w-8 rounded-full bg-cyan-800 flex items-center justify-center text-white text-xs">SL</div>
+                                </div>
+
+                                <a href="#" class="text-cyan-400 hover:text-white flex items-center transition-colors text-sm">
+                                    View details
+                                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column (Date) - Visible only on md+ -->
+                <div class="hidden md:block md:w-1/2 pl-8">
+                    <div class="text-gray-400 mb-1">February 10, 2025</div>
+                    <div class="text-cyan-400 text-sm">RMIT University</div>
+                </div>
+            </div>
+
+            <!-- Activity 3 -->
+            <div class="relative md:flex mb-12">
+                <div class="hidden md:block absolute left-1/2 top-6 w-6 h-6 rounded-full bg-green-600 transform -translate-x-1/2 z-10"></div>
+
+                <!-- Left Column (Date) - Visible only on md+ -->
+                <div class="hidden md:block md:w-1/2 pr-8 text-right">
+                    <div class="text-gray-400 mb-1">January 28, 2025</div>
+                    <div class="text-cyan-400 text-sm">TechFuture Inc.</div>
+                </div>
+
+                <!-- Right Column (Content) -->
+                <div class="md:w-1/2 md:pl-8">
+                    <!-- Mobile date - Visible only on small screens -->
+                    <div class="md:hidden text-gray-400 mb-1">January 28, 2025</div>
+                    <div class="md:hidden text-cyan-400 text-sm mb-2">TechFuture Inc.</div>
+
+                    <div class="card-bg rounded-xl overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-green-900 to-blue-900 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <img src="https://via.placeholder.com/800x400" alt="Corporate training at TechFuture" class="object-cover w-full h-full opacity-40">
+                                <div class="absolute inset-0 bg-gradient-to-r from-green-900 to-blue-900 opacity-60"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <h3 class="text-white text-2xl font-bold text-center px-4">Enterprise LLM Integration Training</h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <p class="text-gray-300 mb-4">Our team conducted a two-day corporate training program for TechFuture's engineering team on integrating LLMs into their product suite and development workflows.</p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Corporate Training</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Integration</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Enterprise</span>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex -space-x-2">
+                                    <div class="h-8 w-8 rounded-full bg-blue-800 flex items-center justify-center text-white text-xs z-30">DR</div>
+                                    <div class="h-8 w-8 rounded-full bg-indigo-800 flex items-center justify-center text-white text-xs z-20">MT</div>
+                                    <div class="h-8 w-8 rounded-full bg-purple-800 flex items-center justify-center text-white text-xs z-10">CP</div>
+                                </div>
+
+                                <a href="#" class="text-cyan-400 hover:text-white flex items-center transition-colors text-sm">
+                                    View details
+                                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity 4 -->
+            <div class="relative md:flex mb-12">
+                <div class="hidden md:block absolute left-1/2 top-6 w-6 h-6 rounded-full bg-red-600 transform -translate-x-1/2 z-10"></div>
+
+                <!-- Left Column (Content) -->
+                <div class="md:w-1/2 pr-8">
+                    <!-- Mobile date - Visible only on small screens -->
+                    <div class="md:hidden text-gray-400 mb-1">January 15, 2025</div>
+                    <div class="md:hidden text-cyan-400 text-sm mb-2">UTS Startup Hub</div>
+
+                    <div class="card-bg rounded-xl overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-red-900 to-purple-900 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <img src="https://via.placeholder.com/800x400" alt="Hackathon at UTS Startup Hub" class="object-cover w-full h-full opacity-40">
+                                <div class="absolute inset-0 bg-gradient-to-r from-red-900 to-purple-900 opacity-60"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <h3 class="text-white text-2xl font-bold text-center px-4">AI Safety Hackathon</h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <p class="text-gray-300 mb-4">We partnered with UTS Startup Hub to host a weekend hackathon focused on developing innovative solutions for AI safety challenges in LLM applications.</p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Hackathon</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">AI Safety</span>
+                                <span class="text-xs text-gray-400 bg-blue-900 bg-opacity-40 px-2 py-1 rounded">Startups</span>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <div class="flex -space-x-2">
+                                    <div class="h-8 w-8 rounded-full bg-blue-800 flex items-center justify-center text-white text-xs z-30">DR</div>
+                                    <div class="h-8 w-8 rounded-full bg-cyan-800 flex items-center justify-center text-white text-xs z-20">SL</div>
+                                    <div class="h-8 w-8 rounded-full bg-indigo-800 flex items-center justify-center text-white text-xs z-10">MT</div>
+                                    <div class="h-8 w-8 rounded-full bg-gray-800 flex items-center justify-center text-white text-xs">+3</div>
+                                </div>
+
+                                <a href="#" class="text-cyan-400 hover:text-white flex items-center transition-colors text-sm">
+                                    View details
+                                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column (Date) - Visible only on md+ -->
+                <div class="hidden md:block md:w-1/2 pl-8">
+                    <div class="text-gray-400 mb-1">January 15, 2025</div>
+                    <div class="text-cyan-400 text-sm">UTS Startup Hub</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="#" class="inline-flex items-center text-cyan-400 hover:text-white transition-colors">
+                View All Past Activities
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Activity Types Section -->
+    <div class="max-w-7xl mx-auto px-6 mb-16">
+        <h2 class="text-2xl font-bold text-white mb-8">Our <span class="neon-text">Activity Types</span></h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Activity Type 1 -->
+            <div class="card-bg rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-8 w-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Guest Lectures</h3>
+                <p class="text-gray-400">Expert talks and presentations at universities and educational institutions on various AI and LLM topics.</p>
+            </div>
+
+            <!-- Activity Type 2 -->
+            <div class="card-bg rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-8 w-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Workshops</h3>
+                <p class="text-gray-400">Hands-on, interactive sessions where participants learn practical skills for working with large language models.</p>
+            </div>
+
+            <!-- Activity Type 3 -->
+            <div class="card-bg rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-8 w-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Corporate Training</h3>
+                <p class="text-gray-400">Customized training programs for companies looking to integrate LLMs into their products, services, and workflows.</p>
+            </div>
+
+            <!-- Activity Type 4 -->
+            <div class="card-bg rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-8 w-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Hackathons & Events</h3>
+                <p class="text-gray-400">Collaborative events that bring together students, professionals, and researchers to solve AI challenges and showcase innovations.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Host an Event CTA -->
+    <div class="max-w-7xl mx-auto px-6 mb-16">
+        <div class="card-bg rounded-xl overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-8 flex flex-col justify-center">
+                    <h2 class="text-2xl font-bold text-white mb-4">Host a NeuraLeap Event at Your Institution</h2>
+
+                    <p class="text-gray-300 mb-6">Interested in bringing NeuraLeap's expertise to your university, organization, or company? We offer a range of customizable activities tailored to your specific needs and audience.</p>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="flex items-start">
+                            <svg class="h-5 w-5 text-cyan-400 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <div class="text-gray-300">Expert-led workshops and lectures on LLMs and AI safety</div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <svg class="h-5 w-5 text-cyan-400 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <div class="text-gray-300">Customized content for your specific field or industry</div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <svg class="h-5 w-5 text-cyan-400 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <div class="text-gray-300">Hands-on activities and practical applications</div>
+                        </div>
+                    </div>
+
+                    <a href="#" class="inline-block neon-button px-6 py-3 rounded-lg font-medium">Contact Us to Arrange</a>
+                </div>
+
+                <div class="hidden md:block bg-gradient-to-r from-blue-900 to-indigo-900 p-8">
+                    <div class="h-full flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="relative">
+                                <div class="absolute -inset-1 bg-cyan-500 rounded-full opacity-20 animate-pulse"></div>
+                                <div class="relative z-10 bg-blue-800 rounded-full p-4">
+                                    <svg class="h-16 w-16 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3 class="text-white text-xl font-bold mt-6">Flexible Scheduling</h3>
+                            <p class="text-blue-200 mt-2">Events available year-round</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- JavaScript -->
+    <script src="/js/main.js"></script>
+    <script>
+        // Load components
+        fetch('/components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                
+                // 确保下拉菜单正常工作 - 增强版
+                setTimeout(() => {
+                    // 直接初始化下拉菜单，不依赖header.html中的代码
+                    const dropdowns = document.querySelectorAll('.dropdown');
+                    console.log(`找到 ${dropdowns.length} 个下拉菜单元素`);
+                    
+                    dropdowns.forEach((dropdown) => {
+                        const menu = dropdown.querySelector('.dropdown-menu');
+                        
+                        if (menu) {
+                            // 确保菜单默认是隐藏的
+                            menu.classList.add('hidden');
+                            
+                            // 鼠标悬停显示下拉菜单
+                            dropdown.addEventListener('mouseenter', () => {
+                                menu.classList.remove('hidden');
+                            });
+                            
+                            // 鼠标离开隐藏下拉菜单
+                            dropdown.addEventListener('mouseleave', () => {
+                                menu.classList.add('hidden');
+                            });
+                        }
+                    });
+                    
+                    // 如果header中定义了initNeuraLeapHeader函数，也调用它
+                    if (window.initNeuraLeapHeader) {
+                        window.initNeuraLeapHeader();
+                    }
+                }, 300);
+            });
+            
+        fetch('/components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

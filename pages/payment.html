@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - NeuraLeap</title>
+    <meta name="description" content="Secure payment processing for NeuraLeap courses and services">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/animations.css" rel="stylesheet">
+    
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="bg-dark-bg text-white min-h-screen flex flex-col">
+    <!-- Neural network background -->
+    <div class="neural-bg"></div>
+    <div class="tech-lines-bg"></div>
+    
+    <!-- Header navigation -->
+    <div id="header-container"></div>
+
+    <!-- Main content -->
+    <main class="flex-grow pt-24 pb-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold mb-4">
+                    <span class="neon-text">Secure Payment</span>
+                </h1>
+                <p class="text-xl text-gray-300">Complete your purchase securely with credit card or PayPal</p>
+            </div>
+            
+            <div class="bg-dark-card rounded-xl shadow-glow p-8 mb-8">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Order Summary -->
+                    <div class="md:w-1/2">
+                        <h2 class="text-2xl font-semibold mb-6">Order Summary</h2>
+                        <div id="order-summary" class="space-y-4">
+                            <!-- Order details will be populated by JavaScript -->
+                            <div class="flex justify-between py-3 border-b border-gray-700">
+                                <span>Course Name</span>
+                                <span id="course-name">Advanced AI Programming</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b border-gray-700">
+                                <span>Duration</span>
+                                <span id="course-duration">12 weeks</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b border-gray-700">
+                                <span>Format</span>
+                                <span id="course-format">Online, self-paced</span>
+                            </div>
+                            <div class="flex justify-between py-3 font-bold text-xl">
+                                <span>Total (AUD)</span>
+                                <span id="course-price">A$799.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h3 class="text-lg font-medium mb-2">Currency</h3>
+                            <div class="bg-dark-bg p-3 rounded flex items-center space-x-2">
+                                <span class="text-2xl">🇦🇺</span>
+                                <span>Australian Dollar (AUD)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Form -->
+                    <div class="md:w-1/2">
+                        <h2 class="text-2xl font-semibold mb-6">Payment Method</h2>
+                        
+                        <!-- Payment method tabs -->
+                        <div class="mb-6">
+                            <div class="flex border-b border-gray-700">
+                                <button id="tab-card" class="payment-tab active py-2 px-4 flex-1 text-center border-b-2 border-cyan-500">
+                                    <svg class="inline-block w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+                                        <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Credit Card
+                                </button>
+                                <button id="tab-paypal" class="payment-tab py-2 px-4 flex-1 text-center">
+                                    <svg class="inline-block w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.568 4.92-5.39 5.263a7.97 7.97 0 0 1-.853.054h-2.19c-.152 0-.295.037-.414.11-.026.02-.051.042-.075.066-.066.068-.123.148-.162.242l-.08.305-.947 6.032-.042.267c-.016.054-.03.106-.042.153-.072.26.06.533.323.61.068.02.137.034.21.034h4.057c.435 0 .807-.318.875-.748l.037-.19.245-1.556.063-.326a.876.876 0 0 1 .868-.748h.55c3.56 0 6.35-1.443 7.17-5.616.344-1.727.179-3.168-.723-4.166z"></path>
+                                    </svg>
+                                    PayPal
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Credit Card Payment Form -->
+                        <div id="payment-card" class="payment-method-content">
+                            <form id="payment-form" class="space-y-4">
+                                <div class="form-row">
+                                    <label for="cardholder-name" class="block text-sm font-medium mb-1">Cardholder Name</label>
+                                    <input id="cardholder-name" type="text" class="w-full p-3 bg-dark-bg border border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" placeholder="John Doe" required>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <label for="card-element" class="block text-sm font-medium mb-1">Credit Card Information</label>
+                                    <div id="card-element" class="p-3 bg-dark-bg border border-gray-700 rounded-lg">
+                                        <!-- Stripe Elements will be inserted here -->
+                                    </div>
+                                    <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
+                                </div>
+                                
+                                <button type="submit" id="submit-button" class="w-full primary-button text-white px-6 py-3 rounded-lg flex items-center justify-center pulse-button">
+                                    <span id="button-text">Pay A$799.00</span>
+                                    <div id="spinner" class="hidden">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- PayPal Payment -->
+                        <div id="payment-paypal" class="payment-method-content hidden">
+                            <div class="bg-dark-bg p-4 rounded-lg border border-gray-700 mb-4">
+                                <p class="text-center text-gray-300 mb-4">Click the PayPal button below to complete your payment</p>
+                                <div id="paypal-button-container" class="flex justify-center"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex items-center justify-center space-x-4">
+                            <div class="text-gray-400 text-sm flex items-center">
+                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                Secure Payment
+                            </div>
+                            <img src="https://cdn.jsdelivr.net/gh/stripe/stripe-js@1.32.0/landing/img/stripe-badge.png" alt="Powered by Stripe" class="h-8">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-dark-card rounded-xl shadow-glow p-6">
+                <h3 class="text-xl font-semibold mb-4">Secure Transaction</h3>
+                <p class="text-gray-300 mb-4">
+                    Your payment information is encrypted and securely processed. We never store your full credit card details.
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-3">
+                        <svg class="w-8 h-8 mx-auto mb-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        <p class="text-sm">SSL Encrypted</p>
+                    </div>
+                    <div class="p-3">
+                        <svg class="w-8 h-8 mx-auto mb-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                        <p class="text-sm">Fraud Protection</p>
+                    </div>
+                    <div class="p-3">
+                        <svg class="w-8 h-8 mx-auto mb-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-sm">24/7 Support</p>
+                    </div>
+                    <div class="p-3">
+                        <svg class="w-8 h-8 mx-auto mb-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-sm">Money-Back Guarantee</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+    <script src="/js/payment.js"></script>
+</body>
+</html> 

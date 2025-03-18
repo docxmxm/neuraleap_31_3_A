@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Anonymous Access Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        h1 {
+            color: #3273dc;
+        }
+        pre {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+            overflow: auto;
+        }
+        button {
+            background: #3273dc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Supabase Anonymous Access Test</h1>
+    
+    <p>This page tests accessing courses with the anonymous key using various methods.</p>
+    
+    <div>
+        <h2>Test 1: Simple Query (only active courses)</h2>
+        <button onclick="testSimpleQuery()">Run Test</button>
+        <pre id="simple-result">Click to run test...</pre>
+    </div>
+    
+    <div>
+        <h2>Test 2: Explicit Columns</h2>
+        <button onclick="testExplicitColumns()">Run Test</button>
+        <pre id="explicit-result">Click to run test...</pre>
+    </div>
+    
+    <div>
+        <h2>Test 3: Compare Service Role vs Anon</h2>
+        <button onclick="compareAccess()">Run Test</button>
+        <pre id="compare-result">Click to run test...</pre>
+    </div>
+    
+    <div>
+        <h2>Test 4: Access Without Users Table</h2>
+        <button onclick="testNoUserJoin()">Run Test</button>
+        <pre id="no-user-result">Click to run test...</pre>
+    </div>
+    
+    <script>
+        const API_URL = 'http://127.0.0.1:54321';
+        const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+        const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU';
+        
+        // Test 1: Simple query with filter
+        async function testSimpleQuery() {
+            const resultElement = document.getElementById('simple-result');
+            resultElement.textContent = 'Running test...';
+            
+            try {
+                const response = await fetch(`${API_URL}/rest/v1/courses?select=*&is_active=eq.true`, {
+                    headers: {
+                        'apikey': ANON_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultElement.innerHTML = '<span class="success">SUCCESS!</span> Got ' + data.length + ' courses\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    const errorText = await response.text();
+                    resultElement.innerHTML = '<span class="error">FAILED!</span> Status: ' + response.status + '\n\n' + errorText;
+                }
+            } catch (error) {
+                resultElement.innerHTML = '<span class="error">ERROR!</span> ' + error.message;
+            }
+        }
+        
+        // Test 2: Explicit columns
+        async function testExplicitColumns() {
+            const resultElement = document.getElementById('explicit-result');
+            resultElement.textContent = 'Running test...';
+            
+            try {
+                const response = await fetch(`${API_URL}/rest/v1/courses?select=id,title,description,price,is_active&is_active=eq.true`, {
+                    headers: {
+                        'apikey': ANON_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultElement.innerHTML = '<span class="success">SUCCESS!</span> Got ' + data.length + ' courses\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    const errorText = await response.text();
+                    resultElement.innerHTML = '<span class="error">FAILED!</span> Status: ' + response.status + '\n\n' + errorText;
+                }
+            } catch (error) {
+                resultElement.innerHTML = '<span class="error">ERROR!</span> ' + error.message;
+            }
+        }
+        
+        // Test 3: Compare service role vs anon access
+        async function compareAccess() {
+            const resultElement = document.getElementById('compare-result');
+            resultElement.textContent = 'Running comparison...';
+            
+            try {
+                // Try with anonymous key
+                const anonResponse = await fetch(`${API_URL}/rest/v1/courses?select=id,title&is_active=eq.true`, {
+                    headers: {
+                        'apikey': ANON_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                // Try with service key
+                const serviceResponse = await fetch(`${API_URL}/rest/v1/courses?select=id,title&is_active=eq.true`, {
+                    headers: {
+                        'apikey': SERVICE_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                let anonResult, serviceResult;
+                
+                if (anonResponse.ok) {
+                    anonResult = {
+                        success: true,
+                        status: anonResponse.status,
+                        data: await anonResponse.json()
+                    };
+                } else {
+                    anonResult = {
+                        success: false,
+                        status: anonResponse.status,
+                        error: await anonResponse.text()
+                    };
+                }
+                
+                if (serviceResponse.ok) {
+                    serviceResult = {
+                        success: true,
+                        status: serviceResponse.status,
+                        data: await serviceResponse.json()
+                    };
+                } else {
+                    serviceResult = {
+                        success: false,
+                        status: serviceResponse.status,
+                        error: await serviceResponse.text()
+                    };
+                }
+                
+                const result = {
+                    anonymous: anonResult,
+                    service: serviceResult
+                };
+                
+                resultElement.innerHTML = 
+                    (anonResult.success ? '<span class="success">Anonymous: SUCCESS</span>' : '<span class="error">Anonymous: FAILED</span>') +
+                    ' | ' +
+                    (serviceResult.success ? '<span class="success">Service: SUCCESS</span>' : '<span class="error">Service: FAILED</span>') +
+                    '\n\n' + JSON.stringify(result, null, 2);
+            } catch (error) {
+                resultElement.innerHTML = '<span class="error">ERROR!</span> ' + error.message;
+            }
+        }
+        
+        // Test 4: Query that avoids joining with users table
+        async function testNoUserJoin() {
+            const resultElement = document.getElementById('no-user-result');
+            resultElement.textContent = 'Running test...';
+            
+            try {
+                // Using explicit parameters to avoid automatic joins
+                const response = await fetch(`${API_URL}/rest/v1/courses?select=id,title,description,price&is_active=eq.true&order=id.asc`, {
+                    headers: {
+                        'apikey': ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Prefer': 'count=exact'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultElement.innerHTML = '<span class="success">SUCCESS!</span> Got ' + data.length + ' courses\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    const errorText = await response.text();
+                    resultElement.innerHTML = '<span class="error">FAILED!</span> Status: ' + response.status + '\n\n' + errorText;
+                }
+            } catch (error) {
+                resultElement.innerHTML = '<span class="error">ERROR!</span> ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html> 

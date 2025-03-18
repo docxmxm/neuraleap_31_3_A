@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>NeuraLeap - Advanced AI Learning Platform</title>
+    <meta name="description" content="NeuraLeap is an advanced AI learning platform offering cutting-edge courses on large language models, neural networks, and AI safety.">
+    <meta name="keywords" content="AI learning, machine learning, neural networks, LLM, AI safety, AI courses">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/animations.css" rel="stylesheet">
+    
+    <!-- Additional mobile styles -->
+    <style>
+        /* Mobile menu improvements */
+        .mobile-menu {
+            position: absolute;
+            top: 64px; /* Match header height */
+            left: 0;
+            right: 0;
+            z-index: 40;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Ensure better touch targets for mobile */
+        .mobile-menu a, 
+        .mobile-dropdown button {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Improved visibility for active mobile dropdown */
+        .mobile-dropdown-menu {
+            background-color: rgba(17, 24, 39, 0.8);
+            border-left: 2px solid #06b6d4;
+        }
+        
+        /* Improved mobile responsiveness */
+        @media (max-width: 640px) {
+            /* Card improvements */
+            .card-bg {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 90%;
+            }
+            
+            /* Fix hero section on mobile */
+            .hero-gradient {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+                min-height: auto;
+                height: auto;
+            }
+            
+            /* Improve button sizing on mobile */
+            .primary-button, .neon-button {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 0.5rem;
+            }
+            
+            /* Improve text readability on small screens */
+            h1 {
+                font-size: 2.5rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            h2 {
+                font-size: 2rem !important;
+            }
+            
+            h3 {
+                font-size: 1.5rem !important;
+            }
+            
+            /* Improved card layout for mobile */
+            .grid {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            /* Make neural network display better on mobile */
+            .neural-network {
+                transform: scale(0.8);
+                margin: 0 auto;
+            }
+            
+            /* Adjust padding for better content flow */
+            .py-16 {
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+            
+            /* Ensure proper spacing between sections */
+            .mb-12 {
+                margin-bottom: 2rem !important;
+            }
+            
+            /* Fix table layout issues */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            /* Improve mobile menu scrolling */
+            .mobile-menu {
+                max-height: calc(100vh - 64px);
+                overflow-y: auto;
+            }
+        }
+        
+        /* Medium screen adjustments */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .neural-network {
+                transform: scale(0.9);
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        
+        /* Fix for iOS touch events */
+        @supports (-webkit-touch-callout: none) {
+            .mobile-menu a, 
+            .mobile-dropdown button,
+            .neon-button,
+            .primary-button {
+                cursor: pointer;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+        }
+    </style>
+
+    <!-- Load components.js first to ensure its functions are available -->
+    <script src="/js/components.js"></script>
+    
+    <!-- Supabase JS Client - Required for auth handling -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+
+    <!-- Auth Redirect Handler for OAuth callbacks -->
+    <script src="/js/auth-redirect.js"></script>
+    
+    <!-- Debug hide script -->
+    <script>
+        // Simple script to hide debug information
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide all debug divs and elements with debug information
+            setTimeout(function() {
+                const debugElements = document.querySelectorAll('[id*="debug"]');
+                debugElements.forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Handle any fixed positioned divs at the top
+                const allDivs = document.querySelectorAll('div');
+                allDivs.forEach(div => {
+                    const style = window.getComputedStyle(div);
+                    if (style.position === 'fixed' && style.top === '0px' && style.zIndex > 9000) {
+                        div.style.display = 'none';
+                    }
+                });
+            }, 500);
+        });
+    </script>
+    
+    <!-- Temporary Logout Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a logout button
+            const logoutBtn = document.createElement('button');
+            logoutBtn.className = 'fixed top-20 right-4 z-50 neon-button px-4 py-2 rounded-lg';
+            logoutBtn.textContent = 'Force Logout';
+            logoutBtn.id = 'temp-logout-btn';
+            
+            // Add logout functionality
+            logoutBtn.addEventListener('click', async function() {
+                try {
+                    console.log("Attempting to log out...");
+                    
+                    // Try all possible methods to log out
+                    if (window.supabase && window.supabase.auth) {
+                        console.log("Using window.supabase.auth.signOut()");
+                        await window.supabase.auth.signOut();
+                    }
+                    
+                    if (window.supabaseClient && window.supabaseClient.auth) {
+                        console.log("Using window.supabaseClient.auth.signOut()");
+                        await window.supabaseClient.auth.signOut();
+                    }
+                    
+                    if (typeof signOut === 'function') {
+                        console.log("Using signOut()");
+                        await signOut();
+                    }
+                    
+                    // Clear ALL Supabase-related items from localStorage
+                    console.log("Clearing localStorage items...");
+                    
+                    // Get all keys in localStorage
+                    const keysToRemove = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && (
+                            key.includes('supabase') || 
+                            key.includes('sb-') || 
+                            key.includes('auth') || 
+                            key.includes('token')
+                        )) {
+                            keysToRemove.push(key);
+                        }
+                    }
+                    
+                    // Remove all matching keys
+                    keysToRemove.forEach(key => {
+                        console.log(`Removing localStorage key: ${key}`);
+                        localStorage.removeItem(key);
+                    });
+                    
+                    // Also clear all cookies
+                    document.cookie.split(";").forEach(function(c) {
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                    });
+                    
+                    // Show success message
+                    alert('You have been forcefully logged out! The page will now reload.');
+                    
+                    // Hard reload by changing location
+                    window.location.href = "/";
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    alert('Error during logout: ' + (error.message || 'Unknown error'));
+                }
+            });
+            
+            // Add the button to the body
+            document.body.appendChild(logoutBtn);
+        });
+    </script>
+</head>
+<body class="bg-dark-bg text-white min-h-screen">
+    <!-- Dev Banner -->
+    <!-- 
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-3 md:mb-0">
+                    <span class="font-semibold">Development Mode</span> - 
+                    <span class="text-sm">Using Python SimpleHTTPServer - Only client-side auth supported</span>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/pages/login.html" class="text-white hover:text-indigo-200 underline text-sm">Login Page</a>
+                    <a href="/pages/auth-test.html" class="text-white hover:text-indigo-200 underline text-sm">Auth Test</a>
+                    <a href="/pages/dashboard/index.html" class="text-white hover:text-indigo-200 underline text-sm">Dashboard</a>
+                    <a href="https://github.com/user/NerualLeap-Website" class="text-white hover:text-indigo-200 underline text-sm">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <!-- Debugging information -->
+    <div id="debug-info" style="position: fixed; top: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.8); color: lime; font-family: monospace; padding: 10px; z-index: 9999; display: none;">
+        <div>Debug Information - <button onclick="document.getElementById('debug-info').style.display='none'">Close</button></div>
+        <div id="debug-session-info">Checking session status...</div>
+    </div>
+    <script>
+        // Debug helper to check Supabase session
+        document.addEventListener('DOMContentLoaded', async function() {
+            const debugInfoEl = document.getElementById('debug-info');
+            const sessionInfoEl = document.getElementById('debug-session-info');
+            
+            // Show debug info with keyboard shortcut (Ctrl+Shift+D)
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                    debugInfoEl.style.display = debugInfoEl.style.display === 'none' ? 'block' : 'none';
+                    checkSessionStatus();
+                }
+            });
+            
+            async function checkSessionStatus() {
+                try {
+                    sessionInfoEl.innerHTML = 'Checking session status...';
+                    
+                    // List all localStorage items
+                    let storageInfo = 'localStorage items:<br>';
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        storageInfo += `- ${key}: ${localStorage.getItem(key).substring(0, 30)}...<br>`;
+                    }
+                    
+                    // Check session with Supabase
+                    let sessionInfo = 'Session status: ';
+                    let sessionExists = false;
+                    
+                    if (window.supabase && window.supabase.auth) {
+                        const { data, error } = await window.supabase.auth.getSession();
+                        if (data && data.session) {
+                            sessionInfo += `Active (User: ${data.session.user.email})<br>`;
+                            sessionExists = true;
+                        } else {
+                            sessionInfo += 'None (not logged in)<br>';
+                        }
+                        
+                        if (error) {
+                            sessionInfo += `Error: ${error.message}<br>`;
+                        }
+                    } else {
+                        sessionInfo += 'Supabase auth not available<br>';
+                    }
+                    
+                    // Combine and display the information
+                    sessionInfoEl.innerHTML = sessionInfo + '<br>' + storageInfo;
+                    
+                    // Auto-show debug info if session exists
+                    if (sessionExists) {
+                        debugInfoEl.style.display = 'block';
+                    }
+                } catch (error) {
+                    sessionInfoEl.innerHTML = 'Error checking session: ' + error.message;
+                }
+            }
+            
+            // Initial check
+            setTimeout(checkSessionStatus, 1500);
+        });
+    </script>
+    
+    <!-- Neural network background -->
+    <div class="neural-bg"></div>
+    <div class="tech-lines-bg"></div>
+    
+    <!-- Header navigation - Simplified, directly included instead of dynamically loaded -->
+    <header class="bg-dark-bg text-white fixed w-full z-50 shadow-lg">
+        <div class="flicker-line"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/index.html" class="logo-n flex items-center">
+                        <div class="logo-bg w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 mr-2 relative overflow-hidden">
+                            <span class="text-2xl font-bold">N</span>
+                        </div>
+                        <span class="logo-text text-xl font-bold text-white tracking-wide">
+                            <span class="neon-text">Neura</span>leap
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden sm:ml-6 sm:flex space-x-8 items-center">
+                    <nav class="desktop-menu">
+                        <a href="/index.html" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">Home</a>
+                        
+                        <!-- Courses Dropdown -->
+                        <div class="dropdown relative inline-block">
+                            <button class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors dropdown-toggle">
+                                Courses
+                                <svg class="h-4 w-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute mt-2 py-2 bg-dark-card rounded-md shadow-xl z-50 min-w-max hidden">
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">All Courses</a>
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Beginner Courses</a>
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Advanced Courses</a>
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Specialized Courses</a>
+                            </div>
+                        </div>
+                        
+                        <a href="/pages/activities" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">Activities</a>
+                        <a href="/pages/partnerships/index.html" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">Partnerships</a>
+                        
+                        <!-- Resources Dropdown -->
+                        <div class="dropdown relative inline-block">
+                            <button class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors dropdown-toggle">
+                                Resources
+                                <svg class="h-4 w-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute mt-2 py-2 bg-dark-card rounded-md shadow-xl z-50 min-w-max hidden">
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">Resources & Blog</a>
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">AI Tools</a>
+                                <a href="/pages/coming-soon.html" class="dropdown-item block px-4 py-2 text-sm hover:bg-cyan-900">FAQ</a>
+                            </div>
+                        </div>
+                        
+                        <a href="/pages/about-us" class="nav-item px-3 py-2 text-sm font-medium hover:text-cyan-400 transition-colors">About Us</a>
+                    </nav>
+                    
+                    <div class="flex items-center space-x-3">
+                        <a href="/pages/login.html" class="text-cyan-400 hover:text-white transition-colors">Log In</a>
+                        <a href="/pages/register.html" class="neon-button text-sm px-4 py-2 rounded pulse-button">Sign Up</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center sm:hidden">
+                    <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-3 rounded-md text-gray-400 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 active:bg-gray-800 transition-colors" aria-expanded="false" aria-controls="mobile-menu">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu hidden sm:hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 bg-dark-bg shadow-lg">
+            <a href="/index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">Home</a>
+            
+            <!-- Mobile Courses Dropdown -->
+            <div class="mobile-dropdown">
+                <button class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">
+                    <span>Courses</span>
+                    <svg class="h-5 w-5 ml-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="mobile-dropdown-menu pl-4 space-y-1 mt-1 hidden">
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">All Courses</a>
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Beginner Courses</a>
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Advanced Courses</a>
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Specialized Courses</a>
+                </div>
+            </div>
+            
+            <a href="/pages/activities" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">Activities</a>
+            <a href="/pages/partnerships/index.html" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">Partnerships</a>
+            
+            <!-- Mobile Resources Dropdown -->
+            <div class="mobile-dropdown">
+                <button class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">
+                    <span>Resources</span>
+                    <svg class="h-5 w-5 ml-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="mobile-dropdown-menu pl-4 space-y-1 mt-1 hidden">
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">Resources & Blog</a>
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">AI Tools</a>
+                    <a href="/pages/coming-soon.html" class="block px-4 py-3 rounded-md text-sm font-medium hover:bg-cyan-900 hover:text-white transition-colors">FAQ</a>
+                </div>
+            </div>
+            
+            <a href="/pages/about-us" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-cyan-900 hover:text-white transition-colors">About Us</a>
+            
+            <div class="pt-4 pb-3 border-t border-gray-700">
+                <a href="/pages/login.html" class="block w-full text-center text-cyan-400 py-3 text-base font-medium mb-3 hover:bg-gray-800 rounded-md transition-colors">Log In</a>
+                <a href="/pages/register.html" class="block w-full text-center neon-button py-3 text-base font-medium">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spacing to compensate for fixed header -->
+    <div class="h-16"></div>
+
+    <!-- Hero section with particle effect -->
+    <div class="hero-gradient relative min-h-screen flex items-center py-20 px-0 overflow-hidden">
+        <!-- Particle animation background -->
+        <div class="particles" id="particles-js"></div>
+        
+        <!-- Data flow animation effect -->
+        <div class="data-flow"></div>
+
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center relative z-10 w-full px-4 sm:px-6 lg:px-8">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 relative">
+                    Master the Next Gen <br>
+                    <span class="neon-text typewriter">AI Models</span>
+                </h1>
+                <p class="text-xl mb-8 text-gray-300 leading-relaxed">
+                    Enhance your skills with cutting-edge large language model and AI safety courses. Stay ahead in the rapidly evolving field of artificial intelligence.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="/pages/coming-soon.html" class="primary-button text-white px-6 py-3 rounded-lg flex items-center justify-center pulse-button">
+                        Explore Courses <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="/pages/contact.html" class="neon-button px-6 py-3 rounded-lg flex items-center justify-center">
+                        Book a Consultation
+                    </a>
+                </div>
+            </div>
+
+            <!-- Neural network visualization -->
+            <div class="md:w-1/2 flex justify-center">
+                <div class="neural-network animate-float relative" id="neural-network">
+                    <!-- Remove the N in the center of neural network -->
+                    
+                    <!-- Add neon effect elements -->
+                    <div class="neon-pulse-container">
+                        <div class="neon-pulse neon-pulse-1"></div>
+                        <div class="neon-pulse neon-pulse-2"></div>
+                        <div class="neon-pulse neon-pulse-3"></div>
+                    </div>
+                    
+                    <!-- Add larger, more designed N -->
+                    <div class="designer-n">
+                        <div class="designer-n-shape">N</div>
+                        <div class="designer-n-glow"></div>
+                        <div class="designer-n-flicker">N</div>
+                        <div class="designer-n-highlight">N</div>
+                    </div>
+                    
+                    <!-- Neon Lines -->
+                    <div class="neon-lines">
+                        <div class="neon-line neon-line-1"></div>
+                        <div class="neon-line neon-line-2"></div>
+                        <div class="neon-line neon-line-3"></div>
+                        <div class="neon-line neon-line-4"></div>
+                    </div>
+                    
+                    <!-- Neon Nodes -->
+                    <div class="neon-nodes">
+                        <div class="neon-node neon-node-1"></div>
+                        <div class="neon-node neon-node-2"></div>
+                        <div class="neon-node neon-node-3"></div>
+                        <div class="neon-node neon-node-4"></div>
+                        <div class="neon-node neon-node-5"></div>
+                        <div class="neon-node neon-node-6"></div>
+                        <div class="neon-node neon-node-7"></div>
+                    </div>
+                    
+                    <!-- Neon Connections -->
+                    <div class="neon-connections">
+                        <div class="neon-connection neon-connection-1" data-from="1" data-to="3"></div>
+                        <div class="neon-connection neon-connection-2" data-from="1" data-to="2"></div>
+                        <div class="neon-connection neon-connection-3" data-from="2" data-to="4"></div>
+                        <div class="neon-connection neon-connection-4" data-from="3" data-to="5"></div>
+                        <div class="neon-connection neon-connection-5" data-from="4" data-to="6"></div>
+                        <div class="neon-connection neon-connection-6" data-from="5" data-to="7"></div>
+                        <div class="neon-connection neon-connection-7" data-from="4" data-to="7"></div>
+                        <div class="neon-connection neon-connection-8" data-from="2" data-to="6"></div>
+                    </div>
+                    
+                    <!-- Twinkle Stars -->
+                    <div class="twinkle twinkle-1"></div>
+                    <div class="twinkle twinkle-2"></div>
+                    <div class="twinkle twinkle-3"></div>
+                    <div class="twinkle twinkle-4"></div>
+                    <div class="twinkle twinkle-5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured courses -->
+    <div class="py-16 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 relative inline-block">
+                    Featured <span class="neon-text">Courses</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-6">Discover our carefully designed popular courses to enhance your AI skills and understanding.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Course card 1 -->
+                <div class="card-bg rounded-xl overflow-hidden interactive-card floating-card">
+                    <div class="h-48 bg-gradient-to-r from-blue-800 to-cyan-700 flex items-center justify-center p-6 relative overflow-hidden">
+                        <!-- Course level badge -->
+                        <div class="absolute top-4 left-4 bg-black bg-opacity-50 text-cyan-400 px-3 py-1 rounded-full text-xs font-medium">
+                            Beginner
+                        </div>
+                        <!-- Course icon -->
+                        <div class="text-white text-5xl">🤖</div>
+                        <!-- Neural network lines -->
+                        <div class="neural-network-bg"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 neon-text">AI Fundamentals</h3>
+                        <p class="text-gray-400 mb-4">Learn the basic concepts, history, and application scenarios of AI to build a solid foundation for further study.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-cyan-400 font-bold">$ 299</span>
+                            <a href="/pages/coming-soon.html" class="neon-button text-sm px-3 py-1 rounded">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course card 2 -->
+                <div class="card-bg rounded-xl overflow-hidden interactive-card floating-card">
+                    <div class="h-48 bg-gradient-to-r from-purple-800 to-indigo-600 flex items-center justify-center p-6 relative overflow-hidden">
+                        <div class="absolute top-4 left-4 bg-black bg-opacity-50 text-cyan-400 px-3 py-1 rounded-full text-xs font-medium">
+                            Intermediate
+                        </div>
+                        <div class="text-white text-5xl">🧠</div>
+                        <div class="neural-network-bg"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 neon-text">Large Language Models in Practice</h3>
+                        <p class="text-gray-400 mb-4">Dive deep into LLM principles and applications, learn prompt engineering, and build LLM-based applications.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-cyan-400 font-bold">$ 599</span>
+                            <a href="/pages/coming-soon.html" class="neon-button text-sm px-3 py-1 rounded">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course card 3 -->
+                <div class="card-bg rounded-xl overflow-hidden interactive-card floating-card">
+                    <div class="h-48 bg-gradient-to-r from-red-700 to-pink-600 flex items-center justify-center p-6 relative overflow-hidden">
+                        <div class="absolute top-4 left-4 bg-black bg-opacity-50 text-cyan-400 px-3 py-1 rounded-full text-xs font-medium">
+                            Advanced
+                        </div>
+                        <div class="text-white text-5xl">🔒</div>
+                        <div class="neural-network-bg"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 neon-text">AI Safety & Ethics</h3>
+                        <p class="text-gray-400 mb-4">Explore safety challenges in AI systems, ethical considerations, and best practices for building responsible AI.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-cyan-400 font-bold">$ 799</span>
+                            <a href="/pages/coming-soon.html" class="neon-button text-sm px-3 py-1 rounded">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-10">
+                <a href="/pages/coming-soon.html" class="neon-button px-6 py-3 rounded-lg inline-flex items-center">
+                    Browse All Courses
+                    <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why choose us -->
+    <div class="py-16 px-6 bg-darker-bg relative overflow-hidden">
+        <!-- Flickering line -->
+        <div class="flicker-line absolute top-0 left-0 w-full"></div>
+        
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 relative inline-block">
+                    Why Choose <span class="neon-text">NeuraLeap</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-6">We provide the best AI learning experience for you</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Feature 1 -->
+                <div class="text-center p-6 interactive-card">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 neon-text">Cutting-edge Content</h3>
+                    <p class="text-gray-400">Our courses are carefully designed by industry experts, keeping up with the latest developments in the AI field to ensure you learn the most cutting-edge knowledge.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="text-center p-6 interactive-card">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 neon-text">Practice-Oriented</h3>
+                    <p class="text-gray-400">Learn through real projects and case studies, enabling you to not only master theoretical knowledge but also solve practical problems and quickly apply what you've learned.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="text-center p-6 interactive-card">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-pink-500 to-red-500 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 neon-text">Expert Guidance</h3>
+                    <p class="text-gray-400">You'll receive guidance and support from top experts in the AI field, answering questions and providing personalized learning advice.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Activities -->
+    <div class="py-16 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 relative inline-block">
+                    Upcoming <span class="neon-text">Activities</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-6">Join our teaching sessions, workshops, and events to enhance your AI knowledge and skills.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Activity 1 -->
+                <div class="card-bg rounded-xl overflow-hidden interactive-card floating-card">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-r from-blue-900 to-indigo-900 flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                                <svg class="h-64 w-64 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div class="relative z-10 text-center px-6">
+                                <div class="text-white text-3xl font-bold mb-2">UTS</div>
+                                <div class="text-blue-200">University of Technology Sydney</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded">
+                            Mar 15
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Advanced LLM Implementation Workshop</h3>
+
+                        <div class="flex items-center mb-4">
+                            <svg class="h-5 w-5 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="text-gray-300">UTS Faculty of Engineering and IT</span>
+                        </div>
+
+                        <p class="text-gray-400 mb-6">A hands-on workshop for advanced students and faculty on implementing and fine-tuning large language models.</p>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400 text-sm">9:00 AM - 4:00 PM</span>
+                            <a href="/pages/coming-soon.html" class="neon-button px-4 py-2 rounded text-sm">Register</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 2 -->
+                <div class="card-bg rounded-xl overflow-hidden interactive-card floating-card">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-r from-purple-900 to-indigo-900 flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                                <svg class="h-64 w-64 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div class="relative z-10 text-center px-6">
+                                <div class="text-white text-3xl font-bold mb-2">Microsoft</div>
+                                <div class="text-blue-200">Tech Conference Center</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute top-4 left-4 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded">
+                            Mar 22
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">AI Ethics Roundtable Discussion</h3>
+
+                        <div class="flex items-center mb-4">
+                            <svg class="h-5 w-5 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="text-gray-300">Microsoft HQ, Building C</span>
+                        </div>
+
+                        <p class="text-gray-400 mb-6">Industry leaders and ethicists discuss the ethical implications and safeguards for advanced AI systems.</p>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400 text-sm">1:00 PM - 5:00 PM</span>
+                            <a href="/pages/coming-soon.html" class="neon-button px-4 py-2 rounded text-sm">Register</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 3 -->
+                <div class="card-bg rounded-xl overflow-hidden interactive-card floating-card">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-r from-cyan-900 to-blue-900 flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                                <svg class="h-64 w-64 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div class="relative z-10 text-center px-6">
+                                <div class="text-white text-3xl font-bold mb-2">Online</div>
+                                <div class="text-blue-200">Global Webinar</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute top-4 left-4 bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded">
+                            Mar 28
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Practical Prompt Engineering Webinar</h3>
+
+                        <div class="flex items-center mb-4">
+                            <svg class="h-5 w-5 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                            </svg>
+                            <span class="text-gray-300">Virtual Event</span>
+                        </div>
+
+                        <p class="text-gray-400 mb-6">Learn effective prompt engineering techniques to get better results from large language models like GPT-4.</p>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400 text-sm">10:00 AM - 12:00 PM</span>
+                            <a href="/pages/coming-soon.html" class="neon-button px-4 py-2 rounded text-sm">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-10">
+                <a href="/pages/coming-soon.html" class="neon-button px-6 py-3 rounded-lg inline-flex items-center">
+                    View All Activities
+                    <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA section -->
+    <div class="py-16 px-6 relative overflow-hidden">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">
+                Ready to <span class="neon-text">Start</span> Your AI Learning Journey?
+            </h2>
+            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Whether you're new to AI or a professional seeking advancement, NeuraLeap can help you achieve your goals.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
+                <a href="/pages/coming-soon.html" class="neon-button px-6 py-3 rounded-lg flex items-center justify-center">
+                    Explore Courses
+                </a>
+                <a href="/pages/contact.html" class="px-6 py-3 rounded-lg flex items-center justify-center bg-gray-800 hover:bg-gray-700 transition-colors">
+                    Contact Us
+                </a>
+            </div>
+            
+            <!-- AI-powered development section -->
+            <div class="mt-16 p-6 card-bg rounded-xl">
+                <h3 class="text-xl font-bold mb-4">
+                    <span class="neon-text">Powered by AI</span> Technology
+                </h3>
+                <p class="text-gray-300 mb-6">
+                    We're proud to showcase the power of artificial intelligence in action. The entire NeuraLeap website, including its front-end, back-end, database architecture, and all supporting systems, was developed using cutting-edge AI tools and large language models. This scientific and professional approach to AI-driven development demonstrates the practical applications of the very technologies we teach.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                    <div class="p-4 bg-gray-900 bg-opacity-50 rounded-lg">
+                        <h4 class="font-semibold text-cyan-400 mb-2">AI-Driven Design</h4>
+                        <p class="text-gray-400 text-sm">Our modern, responsive UI was designed with assistance from advanced generative AI models that helped optimize user experience.</p>
+                    </div>
+                    <div class="p-4 bg-gray-900 bg-opacity-50 rounded-lg">
+                        <h4 class="font-semibold text-cyan-400 mb-2">LLM-Generated Code</h4>
+                        <p class="text-gray-400 text-sm">Both front-end and back-end code were developed with large language models, showcasing the capabilities of AI in software engineering.</p>
+                    </div>
+                    <div class="p-4 bg-gray-900 bg-opacity-50 rounded-lg">
+                        <h4 class="font-semibold text-cyan-400 mb-2">AI System Architecture</h4>
+                        <p class="text-gray-400 text-sm">The entire database structure and system architecture were optimized using AI recommendations for performance and scalability.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // Simple component loader - only for footer now since header is directly in HTML
+        document.addEventListener('DOMContentLoaded', function() {
+            // Only handle footer loading
+            if (document.getElementById('footer-container') && typeof loadComponent === 'function') {
+                loadComponent('footer', 'footer-container');
+            }
+        });
+    </script>
+    
+    <!-- Main scripts - Note: components.js is already loaded in head -->
+    <script src="/js/main.js"></script>
+    <script src="/js/particles.min.js" onerror="console.error('Failed to load particles.js. Some visual effects may not work.');"></script>
+    <script>
+        // Initialize particle effects when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('particles-js') && typeof particlesJS !== 'undefined') {
+                try {
+                    particlesJS('particles-js', {
+                        "particles": {
+                            "number": {"value": 80, "density": {"enable": true, "value_area": 800}},
+                            "color": {"value": "#06b6d4"},
+                            "shape": {"type": "circle"},
+                            "opacity": {"value": 0.5, "random": true},
+                            "size": {"value": 3, "random": true},
+                            "line_linked": {
+                                "enable": true,
+                                "distance": 150,
+                                "color": "#06b6d4",
+                                "opacity": 0.4,
+                                "width": 1
+                            },
+                            "move": {
+                                "enable": true,
+                                "speed": 2,
+                                "direction": "none",
+                                "random": true,
+                                "straight": false,
+                                "out_mode": "out",
+                                "bounce": false
+                            }
+                        },
+                        "interactivity": {
+                            "detect_on": "canvas",
+                            "events": {
+                                "onhover": {
+                                    "enable": true,
+                                    "mode": "grab"
+                                },
+                                "onclick": {
+                                    "enable": true,
+                                    "mode": "push"
+                                },
+                                "resize": true
+                            },
+                            "modes": {
+                                "grab": {
+                                    "distance": 140,
+                                    "line_linked": {
+                                        "opacity": 1
+                                    }
+                                },
+                                "push": {
+                                    "particles_nb": 4
+                                }
+                            }
+                        },
+                        "retina_detect": true
+                    });
+                } catch (e) {
+                    console.error("Error initializing particles:", e);
+                }
+            }
+        });
+    </script>
+    
+    <!-- Debug script for header loading -->
+    <script src="/js/debug-header.js"></script>
+    
+    <!-- Simple menu script -->
+    <script>
+        // Enhanced mobile menu initialization with better touch support
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize mobile menu toggle with improved touch handling
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                // Ensure menu is hidden initially on mobile
+                if (window.innerWidth < 640) {
+                    mobileMenu.classList.add('hidden');
+                }
+                
+                // Use touchstart for better mobile response
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mobileMenu.classList.toggle('hidden');
+                    
+                    // Add aria attributes for accessibility
+                    const expanded = !mobileMenu.classList.contains('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', expanded);
+                    
+                    // Visual feedback for the toggle button
+                    if (expanded) {
+                        mobileMenuButton.classList.add('text-cyan-400');
+                    } else {
+                        mobileMenuButton.classList.remove('text-cyan-400');
+                    }
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!mobileMenu.classList.contains('hidden') && 
+                        !e.target.closest('#mobile-menu') && 
+                        !e.target.closest('#mobile-menu-button')) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                        mobileMenuButton.classList.remove('text-cyan-400');
+                    }
+                });
+                
+                // Close menu on window resize to desktop size
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 640 && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                        mobileMenuButton.classList.remove('text-cyan-400');
+                    }
+                });
+            }
+            
+            // Initialize mobile dropdown toggles with improved interaction
+            const mobileDropdownToggles = document.querySelectorAll('.mobile-dropdown > button');
+            mobileDropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Find dropdown menu
+                    const dropdownMenu = this.nextElementSibling;
+                    if (dropdownMenu && dropdownMenu.classList.contains('mobile-dropdown-menu')) {
+                        // Close other open dropdowns
+                        document.querySelectorAll('.mobile-dropdown-menu:not(.hidden)').forEach(menu => {
+                            if (menu !== dropdownMenu) {
+                                menu.classList.add('hidden');
+                                const otherToggle = menu.previousElementSibling;
+                                if (otherToggle && otherToggle.querySelector('svg')) {
+                                    otherToggle.querySelector('svg').style.transform = '';
+                                }
+                            }
+                        });
+                        
+                        // Toggle current dropdown
+                        dropdownMenu.classList.toggle('hidden');
+                        
+                        // Rotate arrow icon
+                        const icon = this.querySelector('svg');
+                        if (icon) {
+                            icon.style.transform = dropdownMenu.classList.contains('hidden') 
+                                ? '' 
+                                : 'rotate(180deg)';
+                            icon.style.transition = 'transform 0.3s ease';
+                        }
+                        
+                        // Add visual feedback for active state
+                        if (!dropdownMenu.classList.contains('hidden')) {
+                            this.classList.add('bg-cyan-900', 'bg-opacity-50');
+                        } else {
+                            this.classList.remove('bg-cyan-900', 'bg-opacity-50');
+                        }
+                    }
+                });
+            });
+            
+            // Initialize desktop dropdown toggles
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Find dropdown menu
+                    const dropdownMenu = this.nextElementSibling;
+                    if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                        // Close other open dropdowns
+                        document.querySelectorAll('.dropdown-menu:not(.hidden)').forEach(menu => {
+                            if (menu !== dropdownMenu) {
+                                menu.classList.add('hidden');
+                            }
+                        });
+                        
+                        dropdownMenu.classList.toggle('hidden');
+                    }
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
+                }
+            });
+            
+            console.log('Enhanced mobile menu initialized');
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraLeap - Registration Successful</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
+</head>
+<body class="bg-dark-bg text-gray-200">
+    <!-- Header (Navbar) -->
+    <div id="header-container"></div>
+
+    <!-- Success Section -->
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mx-auto">
+                <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            
+            <h2 class="mt-6 text-3xl font-extrabold text-white">
+                Registration Successful!
+            </h2>
+            
+            <p class="mt-2 text-lg text-gray-300">
+                Your account has been created successfully. You can now sign in to access your account.
+            </p>
+            
+            <div class="mt-8 card-bg rounded-xl p-8">
+                <p class="text-gray-400 mb-6">
+                    We've sent a confirmation email to your email address. Please check your inbox and follow the instructions to verify your email.
+                </p>
+                
+                <div class="flex flex-col space-y-4">
+                    <a href="/pages/login.html" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-dark-bg bg-cyan-400 hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                        Sign In
+                    </a>
+                    
+                    <a href="/index.html" class="w-full flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Go to Homepage
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <p class="text-sm text-gray-400">
+                    If you have any questions or need assistance, please <a href="/pages/contact.html" class="text-cyan-400 hover:text-cyan-300">contact our support team</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- JavaScript -->
+    <script src="/js/main.js"></script>
+    
+    <!-- Component Loader -->
+    <script>
+        // Load header and footer components
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            fetch('/components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading header:', error));
+            
+            // Load footer
+            fetch('/components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading footer:', error));
+                
+            // Auto-redirect to login page after 5 seconds
+            setTimeout(function() {
+                window.location.href = '/pages/login.html';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

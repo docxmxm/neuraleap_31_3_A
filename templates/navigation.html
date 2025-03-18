@@ -1,0 +1,125 @@
+<!-- Main Navigation Bar Template -->
+<header class="main-nav fixed w-full z-50 shadow-lg">
+    <div class="flash-line"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center">
+                <a href="/index.html" class="logo-n">
+                    <div class="logo-bg">
+                        <span class="text-2xl font-bold">N</span>
+                    </div>
+                    <span class="logo-text">
+                        <span class="neon-text">Neura</span>leap
+                    </span>
+                </a>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden sm:ml-6 sm:flex space-x-8 items-center">
+                <nav class="desktop-menu">
+                    <a href="/index.html" class="nav-item">Home</a>
+                    
+                    <!-- Courses Dropdown -->
+                    <div class="dropdown">
+                        <button class="nav-item dropdown-toggle">
+                            Courses
+                            <svg class="h-4 w-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/pages/courses/index.html" class="dropdown-item">All Courses</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item">Beginner Courses</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item">Advanced Courses</a>
+                            <a href="/pages/coming-soon.html" class="dropdown-item">Specialized Courses</a>
+                        </div>
+                    </div>
+                    
+                    <a href="/pages/activities/index.html" class="nav-item">Activities</a>
+                    <a href="/pages/partnerships/index.html" class="nav-item">Partnerships</a>
+                    
+                    <!-- Resources Dropdown -->
+                    <div class="dropdown">
+                        <button class="nav-item dropdown-toggle">
+                            Resources
+                            <svg class="h-4 w-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/pages/resources/index.html" class="dropdown-item">Resources & Blog</a>
+                            <a href="/pages/resources/tools.html" class="dropdown-item">AI Tools</a>
+                            <a href="/pages/resources/faq.html" class="dropdown-item">FAQ</a>
+                        </div>
+                    </div>
+                    
+                    <a href="/pages/about-us/index.html" class="nav-item">About Us</a>
+                </nav>
+                
+                <!-- Auth Links -->
+                <div class="flex items-center space-x-3 auth-links">
+                    <!-- Will be populated dynamically based on auth status -->
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="flex items-center sm:hidden">
+                <button type="button" id="main-mobile-menu-button" class="mobile-menu-button">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu hidden sm:hidden" id="mobile-main-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="/index.html" class="block">Home</a>
+            
+            <!-- Mobile Courses Dropdown -->
+            <div class="mobile-dropdown">
+                <button class="w-full flex justify-between items-center">
+                    Courses
+                    <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="mobile-dropdown-menu hidden">
+                    <a href="/pages/courses/index.html">All Courses</a>
+                    <a href="/pages/coming-soon.html">Beginner Courses</a>
+                    <a href="/pages/coming-soon.html">Advanced Courses</a>
+                    <a href="/pages/coming-soon.html">Specialized Courses</a>
+                </div>
+            </div>
+            
+            <a href="/pages/activities/index.html">Activities</a>
+            <a href="/pages/partnerships/index.html">Partnerships</a>
+            
+            <!-- Mobile Resources Dropdown -->
+            <div class="mobile-dropdown">
+                <button class="w-full flex justify-between items-center">
+                    Resources
+                    <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="mobile-dropdown-menu hidden">
+                    <a href="/pages/resources/index.html">Resources & Blog</a>
+                    <a href="/pages/resources/tools.html">AI Tools</a>
+                    <a href="/pages/resources/faq.html">FAQ</a>
+                </div>
+            </div>
+            
+            <a href="/pages/about-us/index.html">About Us</a>
+            
+            <!-- Mobile Auth Links -->
+            <div class="mobile-auth-links pt-2 mt-2 border-t border-gray-700">
+                <!-- Will be populated dynamically based on auth status -->
+            </div>
+        </div>
+    </div>
+</header> 

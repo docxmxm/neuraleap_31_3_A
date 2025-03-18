@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .success-icon {
+            color: #10b981;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #06b6d4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .loading {
+            margin: 20px 0;
+            font-style: italic;
+            color: #666;
+        }
+        .error {
+            color: #ef4444;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✓</div>
+        <h1>Email Verification</h1>
+        <div id="status" class="loading">Processing your verification...</div>
+        <div id="action-button"></div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const statusElement = document.getElementById('status');
+            const actionButtonElement = document.getElementById('action-button');
+            
+            // Initialize Supabase client
+            const supabaseUrl = 'https://txggovndoxdybdquopvx.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Z2dvdm5kb3hkeWJkcXVvcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1Nzg3MTMsImV4cCI6MjA1NzE1NDcxM30.p0l-YAdIjq-ICQNRGt5bN6YkrSB4NVDMaBUFYH4fpL4';
+            
+            const { createClient } = supabase;
+            const supabaseClient = createClient(supabaseUrl, supabaseKey);
+            
+            try {
+                // Get URL hash parameters
+                const hash = window.location.hash.substring(1);
+                const params = new URLSearchParams(hash);
+                
+                // Check if this is a confirmation redirect
+                const accessToken = params.get('access_token');
+                const refreshToken = params.get('refresh_token');
+                const type = params.get('type');
+                
+                if (accessToken && type === 'signup') {
+                    // Set session with tokens from URL
+                    const { data, error } = await supabaseClient.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken
+                    });
+                    
+                    if (error) {
+                        throw error;
+                    }
+                    
+                    // Check if user is confirmed
+                    const { data: userData } = await supabaseClient.auth.getUser();
+                    
+                    if (userData?.user?.email_confirmed_at || userData?.user?.confirmed_at) {
+                        statusElement.innerHTML = 'Your email has been successfully verified! You can now log in to your account.';
+                        statusElement.className = '';
+                        
+                        actionButtonElement.innerHTML = '<a href="/profile-test.html" class="button">Go to Login</a>';
+                    } else {
+                        statusElement.innerHTML = 'Email verification is still processing. Please try logging in after a few minutes.';
+                        statusElement.className = 'loading';
+                        
+                        actionButtonElement.innerHTML = '<a href="/profile-test.html" class="button">Try Login</a>';
+                    }
+                } else {
+                    statusElement.innerHTML = 'No verification information found. Please check your email and click the verification link.';
+                    statusElement.className = 'error';
+                    
+                    actionButtonElement.innerHTML = '<a href="/profile-test.html" class="button">Return to Login</a>';
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                statusElement.innerHTML = 'Error processing verification: ' + error.message;
+                statusElement.className = 'error';
+                
+                actionButtonElement.innerHTML = '<a href="/profile-test.html" class="button">Return to Login</a>';
+            }
+        });
+    </script>
+</body>
+</html> 

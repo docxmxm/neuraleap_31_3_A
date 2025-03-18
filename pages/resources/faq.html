@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - NeuraLeap</title>
+    <meta name="description" content="Frequently asked questions about NeuraLeap's AI learning platform, courses, and resources.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/animations.css" rel="stylesheet">
+    
+    <style>
+        .faq-item {
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .faq-question {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            color: #06b6d4;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .faq-answer.active {
+            max-height: 1000px;
+        }
+        
+        .faq-toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-toggle-icon.active {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-200">
+    <!-- Neural network background -->
+    <div class="neural-bg"></div>
+    
+    <!-- Header navigation -->
+    <div id="header-container"></div>
+
+    <!-- Page Header -->
+    <div class="bg-gradient-to-r from-blue-900 to-indigo-900 py-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-4">Frequently Asked <span class="neon-text">Questions</span></h1>
+            <p class="text-xl text-blue-200 max-w-3xl">Find answers to common questions about our platform, courses, and AI learning resources.</p>
+        </div>
+    </div>
+
+    <!-- FAQ Search -->
+    <div class="max-w-4xl mx-auto px-6 py-8">
+        <div class="relative mb-12">
+            <input type="text" id="faq-search" placeholder="Search questions..." class="w-full px-4 py-3 pl-10 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+
+        <!-- FAQ Categories -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-3">
+                <button class="faq-filter px-4 py-2 text-sm rounded-full border border-gray-700 text-gray-300 hover:text-cyan-400 hover:border-cyan-400 transition-colors active" data-category="all">All Questions</button>
+                <button class="faq-filter px-4 py-2 text-sm rounded-full border border-gray-700 text-gray-300 hover:text-cyan-400 hover:border-cyan-400 transition-colors" data-category="courses">Courses</button>
+                <button class="faq-filter px-4 py-2 text-sm rounded-full border border-gray-700 text-gray-300 hover:text-cyan-400 hover:border-cyan-400 transition-colors" data-category="platform">Platform</button>
+                <button class="faq-filter px-4 py-2 text-sm rounded-full border border-gray-700 text-gray-300 hover:text-cyan-400 hover:border-cyan-400 transition-colors" data-category="account">Account</button>
+                <button class="faq-filter px-4 py-2 text-sm rounded-full border border-gray-700 text-gray-300 hover:text-cyan-400 hover:border-cyan-400 transition-colors" data-category="payment">Payment</button>
+            </div>
+        </div>
+
+        <!-- FAQ Items -->
+        <div class="space-y-6">
+            <!-- Courses Category -->
+            <div class="faq-category" data-category="courses">
+                <h2 class="text-2xl font-bold mb-6 text-white category-header">Courses</h2>
+                
+                <!-- FAQ Item 1 -->
+                <div class="faq-item py-4" data-category="courses">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">What types of AI courses do you offer?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            NeuraLeap offers a wide range of AI courses, including beginner introductions to AI concepts, advanced deep learning, specialized courses on large language models (LLMs), neural networks, computer vision, natural language processing, AI ethics and safety, and practical AI application development. Our curriculum is designed to cater to learners at all levels, from those with no prior experience to advanced practitioners looking to specialize.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="faq-item py-4" data-category="courses">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">Do I need prior programming experience for your courses?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            It depends on the course. Our beginner courses are designed to be accessible to those with no prior programming experience and will teach you the necessary programming skills alongside AI concepts. For intermediate and advanced courses, basic programming knowledge (particularly in Python) is recommended. Each course listing clearly indicates the prerequisites so you can choose the right starting point for your skill level.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="faq-item py-4" data-category="courses">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">How long does it take to complete a course?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            Course duration varies depending on the complexity and depth of the material. Introductory courses typically take 4-6 weeks to complete when studying 5-7 hours per week. Intermediate courses range from 8-12 weeks, and our advanced specializations can take 12-16 weeks. However, all our courses are self-paced, so you can progress according to your own schedule and learning speed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Platform Category -->
+            <div class="faq-category" data-category="platform">
+                <h2 class="text-2xl font-bold mb-6 text-white category-header">Platform</h2>
+                
+                <!-- FAQ Item 1 -->
+                <div class="faq-item py-4" data-category="platform">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">Can I access the course materials on mobile devices?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            Yes, the NeuraLeap platform is fully responsive and optimized for mobile devices. You can access all course materials, videos, and readings on smartphones and tablets. However, for coding exercises and practical assignments, we recommend using a desktop or laptop computer for the best experience, as coding on mobile devices can be challenging.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="faq-item py-4" data-category="platform">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">Do you provide certificates upon course completion?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            Yes, upon successful completion of a course (including all assignments and assessments), you will receive a digital certificate that you can share on your professional profiles like LinkedIn. Our certificates are recognized in the industry and can help demonstrate your AI skills to potential employers. For certain advanced courses, we also offer professional certifications that involve more rigorous assessment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Category -->
+            <div class="faq-category" data-category="account">
+                <h2 class="text-2xl font-bold mb-6 text-white category-header">Account</h2>
+                
+                <!-- FAQ Item 1 -->
+                <div class="faq-item py-4" data-category="account">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">How do I reset my password?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            To reset your password, click on the "Forgot Password" link on the login page. Enter the email address associated with your account, and we'll send you a password reset link. Follow the instructions in the email to create a new password. If you don't receive the email, check your spam folder or contact our support team for assistance.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="faq-item py-4" data-category="account">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">Can I change my email address or username?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            Yes, you can change your email address and profile information from your account settings. After logging in, navigate to the "Profile" or "Account Settings" section, where you'll find options to update your personal information. Note that changing your email address will require verification of the new email to ensure account security.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Category -->
+            <div class="faq-category" data-category="payment">
+                <h2 class="text-2xl font-bold mb-6 text-white category-header">Payment</h2>
+                
+                <!-- FAQ Item 1 -->
+                <div class="faq-item py-4" data-category="payment">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">What payment methods do you accept?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            We accept all major credit and debit cards (Visa, Mastercard, American Express, Discover), PayPal, and bank transfers for course payments. For certain regions, we also support local payment methods. Corporate clients can request invoice-based payments for team enrollments. All payments are processed securely through our payment partners.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="faq-item py-4" data-category="payment">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">Do you offer refunds if I'm not satisfied with a course?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            Yes, we offer a 14-day money-back guarantee for most of our courses. If you're not satisfied with the course content, you can request a full refund within 14 days of purchase, provided you haven't completed more than 25% of the course material. To request a refund, contact our support team with your order details. Some specialized or limited-time courses may have different refund policies, which will be clearly stated on the course page.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="faq-item py-4" data-category="payment">
+                    <div class="faq-question flex justify-between items-center">
+                        <h3 class="text-lg font-medium">Are there any discounts or scholarships available?</h3>
+                        <button class="faq-toggle">
+                            <svg class="faq-toggle-icon h-6 w-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="faq-answer mt-2">
+                        <p class="text-gray-400">
+                            We offer several discount programs, including early bird pricing for new courses, bundle discounts when purchasing multiple courses, and special promotions throughout the year. We also have a scholarship program for students, educators, and individuals from underrepresented groups in tech. To apply for a scholarship, visit our "Scholarships" page and complete the application form. Corporate clients can contact us for volume pricing when enrolling multiple team members.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Section -->
+        <div class="mt-16 p-8 bg-gray-800 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4 text-white">Still have questions?</h2>
+            <p class="text-gray-400 mb-6">If you couldn't find the answer to your question, feel free to contact our support team.</p>
+            <a href="/pages/contact.html" class="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all">
+                Contact Support
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="/js/particles-config.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/neural-network.js"></script>
+    
+    <!-- FAQ Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ toggle functionality
+            const faqToggles = document.querySelectorAll('.faq-toggle');
+            
+            faqToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const question = this.closest('.faq-question');
+                    const answer = question.nextElementSibling;
+                    const icon = this.querySelector('.faq-toggle-icon');
+                    
+                    // Toggle active class
+                    answer.classList.toggle('active');
+                    icon.classList.toggle('active');
+                    
+                    // Set max-height for animation
+                    if (answer.classList.contains('active')) {
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                    } else {
+                        answer.style.maxHeight = 0;
+                    }
+                });
+            });
+            
+            // FAQ search functionality
+            const searchInput = document.getElementById('faq-search');
+            const faqItems = document.querySelectorAll('.faq-item');
+            const categoryHeaders = document.querySelectorAll('.category-header');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question h3').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer p').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Show/hide category headers based on visible items
+                categoryHeaders.forEach(header => {
+                    const category = header.closest('.faq-category');
+                    const visibleItems = Array.from(category.querySelectorAll('.faq-item')).filter(item => 
+                        item.style.display !== 'none'
+                    );
+                    
+                    header.style.display = visibleItems.length > 0 ? 'block' : 'none';
+                });
+            });
+            
+            // FAQ category filter
+            const filterButtons = document.querySelectorAll('.faq-filter');
+            const faqCategories = document.querySelectorAll('.faq-category');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide categories
+                    if (category === 'all') {
+                        faqCategories.forEach(cat => cat.style.display = 'block');
+                        faqItems.forEach(item => item.style.display = 'block');
+                    } else {
+                        faqCategories.forEach(cat => {
+                            if (cat.dataset.category === category) {
+                                cat.style.display = 'block';
+                            } else {
+                                cat.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // Reset search
+                    searchInput.value = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

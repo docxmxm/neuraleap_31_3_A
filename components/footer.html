@@ -1,0 +1,144 @@
+<!-- Neural Footer Component -->
+<footer class="bg-dark-bg text-white border-t border-gray-800 relative overflow-hidden">
+    <!-- Tech Lines Background -->
+    <div class="tech-lines-bg"></div>
+    
+    <!-- Neural Network Background -->
+    <div class="neural-network-bg" id="footer-neural-bg"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Brand Information -->
+            <div>
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 mr-2 relative overflow-hidden">
+                        <div class="data-flow"></div>
+                        <span class="text-2xl font-bold">N</span>
+                    </div>
+                    <span class="text-xl font-bold text-white tracking-wide">
+                        <span class="neon-text">Neural</span>leap
+                    </span>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Accelerate AI education and innovation for the next generation of AI developers and practitioners.
+                </p>
+            </div>
+            
+            <!-- Site Map -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="n-icon-decoration"></span>
+                    Site Map
+                </h3>
+                <ul class="space-y-2">
+                    <li><a href="/index.html" class="footer-link">Home</a></li>
+                    <li><a href="/pages/courses/index.html" class="footer-link">Courses</a></li>
+                    <li><a href="/pages/partnerships/index.html" class="footer-link">Partnerships</a></li>
+                    <li><a href="/pages/about/index.html" class="footer-link">About Us</a></li>
+                    <li><a href="/pages/contact.html" class="footer-link">Contact Us</a></li>
+                    <li><a href="/pages/careers.html" class="footer-link">Join Us</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact Information -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="n-icon-decoration"></span>
+                    Contact Us
+                </h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-gray-400">admin@neuraleap.com.au</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="text-gray-400">
+                            L4/11-17 York ST. Sydney NSW 2000 Australia
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Copyright and Policy Links -->
+        <div class="border-t border-gray-800 mt-12 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    &copy; 2025 Neuraleap Pty Ltd. All rights reserved
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="/pages/legal/terms.html" class="text-gray-400 hover:text-cyan-400 text-sm">Terms of Service</a>
+                    <a href="/pages/legal/privacy.html" class="text-gray-400 hover:text-cyan-400 text-sm">Privacy Policy</a>
+                    <a href="/pages/legal/cookies.html" class="text-gray-400 hover:text-cyan-400 text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Create neural network background effect
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('footer-neural-bg');
+    if (!container) return;
+    
+    // Create nodes
+    const nodeCount = 10;
+    const nodes = [];
+    
+    for (let i = 0; i < nodeCount; i++) {
+        const node = document.createElement('div');
+        node.classList.add('neural-dot');
+        
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        node.style.left = `${x}%`;
+        node.style.top = `${y}%`;
+        
+        container.appendChild(node);
+        nodes.push({element: node, x, y});
+    }
+    
+    // Create connection lines
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            // Only connect nodes within a certain distance
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 30) {
+                const line = document.createElement('div');
+                line.classList.add('neural-line');
+                
+                // Calculate line position and angle
+                const x1 = nodes[i].x;
+                const y1 = nodes[i].y;
+                const x2 = nodes[j].x;
+                const y2 = nodes[j].y;
+                
+                const length = distance * container.offsetWidth / 100;
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                
+                line.style.width = `${length}px`;
+                line.style.left = `${x1}%`;
+                line.style.top = `${y1}%`;
+                line.style.transform = `rotate(${angle}deg)`;
+                
+                container.appendChild(line);
+            }
+        }
+    }
+});
+</script>
+
+<!-- Auth UI Initializer (ensures auth UI is properly initialized) -->
+<script src="/js/init-auth-ui.js"></script>

@@ -1,0 +1,84 @@
+# System files
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.swp
+*.tmp
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Dependencies
+/node_modules
+package-lock.json
+
+# Build outputs
+/dist
+/build
+/.next
+/out
+
+# Debug files
+debug.html
+*-debug.html
+*-debug.js
+debug-*.js
+debug.log
+
+# Temporary files
+/temp
+/tmp
+/temp_files
+
+# Editor and IDE files
+.vscode
+.idea
+*.sublime-*
+.project
+.settings
+
+# Test files
+/test
+**/test
+**/tests
+/coverage
+
+# Python
+/.venv
+/venv
+/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Local development backups
+/backup
+**/backup
+*~
+
+# Unused or large assets that shouldn't be deployed
+/screenshots
+/photo/raw
+/assets/original
+/assets/source 

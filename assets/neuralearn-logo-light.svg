@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .text { fill: #ffffff; font-family: 'Arial', sans-serif; font-weight: bold; }
+    .brain { fill: #00b4d8; }
+  </style>
+  <g>
+    <!-- Brain icon -->
+    <path class="brain" d="M25,10 C17,10 10,17 10,25 C10,33 17,40 25,40 C33,40 40,33 40,25 C40,17 33,10 25,10 Z M30,30 C28,32 25,33 22,32 C19,31 17,28 17,25 C17,22 19,19 22,18 C25,17 28,18 30,20 C32,22 33,25 32,28 C31,29 30.5,29.5 30,30 Z"/>
+    <!-- NeuraLeap text -->
+    <text x="50" y="30" class="text" font-size="20">NeuraLeap</text>
+  </g>
+</svg> 

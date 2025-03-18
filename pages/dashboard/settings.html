@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraLeap - Account Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <style>
+        .neon-button {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            color: #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .neon-button:hover {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.7);
+        }
+        
+        .neon-text {
+            color: #06b6d4;
+            text-shadow: 0 0 5px rgba(6, 182, 212, 0.7);
+        }
+        
+        .card-bg {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.8) 100%);
+            border: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        
+        .bg-dark-bg {
+            background-color: #111827;
+        }
+        
+        .bg-dark-card {
+            background-color: #1f2937;
+        }
+        
+        /* Updated styles for better UI consistency with login page */
+        header.bg-dark-bg {
+            background-color: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .neon-button-pulse {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            color: #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+        }
+        
+        a.text-cyan-400, button.text-cyan-400 {
+            color: #06b6d4;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        
+        a.text-cyan-400:hover, button.text-cyan-400:hover {
+            color: #22d3ee;
+            text-shadow: 0 0 8px rgba(6, 182, 212, 0.7);
+        }
+        
+        .nav-item.text-cyan-400 {
+            color: #06b6d4;
+            border-color: #06b6d4;
+            text-shadow: 0 0 5px rgba(6, 182, 212, 0.5);
+        }
+        
+        .notification-dot {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            height: 8px;
+            width: 8px;
+            background-color: #06b6d4;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(6, 182, 212, 0.7);
+            display: none;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            height: 18px;
+            min-width: 18px;
+            padding: 0 4px;
+            background-color: #06b6d4;
+            color: #111827;
+            border-radius: 9px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 5px rgba(6, 182, 212, 0.7);
+            display: none;
+        }
+        
+        .flash-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.8), transparent);
+            animation: flash-line 3s infinite;
+            opacity: 0;
+        }
+        
+        @keyframes flash-line {
+            0% {
+                opacity: 0;
+                left: -100%;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                left: 100%;
+            }
+        }
+        
+        /* Settings specific styles */
+        .settings-card {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .settings-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #06b6d4;
+            background-color: #06b6d4;
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: rgba(6, 182, 212, 0.3);
+        }
+    </style>
+    
+    <!-- Notification System Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/supabase-client.js"></script>
+    <script src="/js/notification-system.js"></script>
+    <script src="/js/notification-handler.js"></script>
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Auth Manager -->
+    <script type="module" src="/js/auth-manager.js"></script>
+</head>
+<body class="bg-dark-bg text-gray-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 border-r border-gray-800">
+                <div class="flex items-center justify-center h-16 px-4 border-b border-gray-800">
+                    <a href="/pages/dashboard/index.html" class="flex items-center space-x-2">
+                        <div class="relative h-8 w-8 flex items-center justify-center">
+                            <div class="absolute inset-0 bg-cyan-500 opacity-20 rounded-lg filter blur-sm"></div>
+                            <div class="relative z-10 text-cyan-400 font-bold text-lg">N</div>
+                        </div>
+                        <span class="text-white font-bold text-lg tracking-tight">Neura<span class="neon-text">Leap</span></span>
+                    </a>
+                </div>
+
+                <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
+                    <nav class="mt-5 flex-1 px-4 space-y-3">
+                        <a href="/pages/dashboard/index.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+
+                        <a href="/pages/dashboard/notifications.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors relative">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                            Notifications
+                            <span class="notification-dot"></span>
+                            <span class="notification-count"></span>
+                        </a>
+
+                        <a href="/pages/dashboard/surveys.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            Surveys
+                        </a>
+                        
+                        <a href="/pages/dashboard/profile.html" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Profile
+                        </a>
+
+                        <a href="/pages/dashboard/settings.html" class="flex items-center px-4 py-3 text-cyan-400 bg-dark-card rounded-lg group">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Settings
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="p-4 border-t border-gray-800">
+                    <a href="#" onclick="handleSignOut(event)" class="flex items-center px-4 py-3 text-gray-400 hover:text-cyan-400 hover:bg-dark-card rounded-lg group transition-colors">
+                        <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Sign Out
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Nav -->
+            <div class="relative">
+                <div class="flash-line top-0"></div>
+                <div class="flex items-center justify-between h-16 px-6 bg-dark-card border-b border-gray-800">
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden text-gray-400 hover:text-white">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Page Title -->
+                    <h1 class="text-xl font-semibold text-white">Settings</h1>
+                    
+                    <!-- User Menu -->
+                    <div class="flex items-center">
+                        <div class="relative">
+                            <button class="flex items-center text-gray-400 hover:text-white focus:outline-none" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                <div class="h-8 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-semibold user-initial">
+                                    A
+                                </div>
+                                <span class="ml-2 hidden md:block" id="user-name-header">Admin User</span>
+                                <svg class="ml-1 h-4 w-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="flex-1 overflow-auto p-6">
+                <!-- Settings Tabs -->
+                <div class="mb-8">
+                    <div class="flex flex-wrap border-b border-gray-800 mb-6">
+                        <button id="account-tab" class="tab-button text-cyan-400 pb-3 border-b-2 border-cyan-400 mr-6 font-medium">Account</button>
+                        <button id="payment-tab" class="tab-button text-gray-400 hover:text-white pb-3 border-b-2 border-transparent hover:border-gray-700 mr-6 font-medium">Payments</button>
+                    </div>
+
+                    <!-- Account Settings Section -->
+                    <div id="account-section" class="tab-content">
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <svg class="h-6 w-6 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                <h3 class="text-xl font-semibold text-white">Change Password</h3>
+                            </div>
+                            <div class="bg-dark-card p-6 rounded-lg border border-gray-800 shadow-lg">
+                                <form class="space-y-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">Current Password</label>
+                                        <div class="relative">
+                                            <input id="current-password" type="password" placeholder="••••••••" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent pr-10">
+                                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white" onclick="togglePasswordVisibility('current-password')">
+                                                <svg class="h-5 w-5 password-eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">New Password</label>
+                                        <div class="relative">
+                                            <input id="new-password" type="password" placeholder="••••••••" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent pr-10">
+                                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white" onclick="togglePasswordVisibility('new-password')">
+                                                <svg class="h-5 w-5 password-eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="mt-2">
+                                            <div class="flex space-x-1 mb-1">
+                                                <div class="h-1 w-1/4 bg-red-500 rounded"></div>
+                                                <div class="h-1 w-1/4 bg-red-500 rounded opacity-30"></div>
+                                                <div class="h-1 w-1/4 bg-red-500 rounded opacity-30"></div>
+                                                <div class="h-1 w-1/4 bg-red-500 rounded opacity-30"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-500">Password strength: Weak</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">Confirm New Password</label>
+                                        <div class="relative">
+                                            <input id="confirm-password" type="password" placeholder="••••••••" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent pr-10">
+                                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white" onclick="togglePasswordVisibility('confirm-password')">
+                                                <svg class="h-5 w-5 password-eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pt-2">
+                                        <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+                                            <h4 class="text-sm font-medium text-gray-300 mb-2">Password requirements:</h4>
+                                            <ul class="text-xs text-gray-400 space-y-1">
+                                                <li class="flex items-center">
+                                                    <svg class="h-4 w-4 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    At least 8 characters
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <svg class="h-4 w-4 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                    At least one uppercase letter
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <svg class="h-4 w-4 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                    At least one number
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <svg class="h-4 w-4 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                    At least one special character
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button type="button" class="neon-button px-6 py-3 rounded-lg">Update Password</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Settings Section -->
+                    <div id="payment-section" class="tab-content hidden">
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <svg class="h-6 w-6 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                <h3 class="text-xl font-semibold text-white">Payment Methods</h3>
+                            </div>
+                            <div class="bg-dark-card p-6 rounded-lg border border-gray-800 shadow-lg mb-8">
+                                <div class="mb-6">
+                                    <h4 class="text-gray-300 font-medium mb-4">Saved Payment Methods</h4>
+                                    <div class="space-y-4">
+                                        <div class="p-4 border border-gray-800 rounded-lg flex items-center justify-between bg-gray-900">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-8 bg-blue-700 rounded flex items-center justify-center text-white font-bold mr-3">
+                                                    Visa
+                                                </div>
+                                                <div>
+                                                    <p class="text-gray-300 font-medium">•••• •••• •••• 4242</p>
+                                                    <p class="text-gray-500 text-sm">Expires 12/25</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex space-x-2">
+                                                <span class="text-xs px-2 py-1 bg-green-900 text-green-400 rounded-full">Default</span>
+                                                <button class="text-gray-400 hover:text-white">
+                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="text-gray-300 font-medium">Add New Payment Method</h4>
+                                    <a href="/pages/dashboard/payment.html" class="neon-button text-sm px-4 py-2 rounded-lg flex items-center">
+                                        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                        Add Method
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center mb-4">
+                                <svg class="h-6 w-6 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path>
+                                </svg>
+                                <h3 class="text-xl font-semibold text-white">Billing History</h3>
+                            </div>
+                            <div class="bg-dark-card p-6 rounded-lg border border-gray-800 shadow-lg">
+                                <div class="overflow-x-auto">
+                                    <table class="w-full">
+                                        <thead>
+                                            <tr class="border-b border-gray-800 text-left text-gray-400 text-sm">
+                                                <th class="pb-3 pr-4 font-medium">Invoice</th>
+                                                <th class="pb-3 pr-4 font-medium">Date</th>
+                                                <th class="pb-3 pr-4 font-medium">Amount</th>
+                                                <th class="pb-3 pr-4 font-medium">Status</th>
+                                                <th class="pb-3 font-medium">Download</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-gray-300">
+                                            <tr class="border-b border-gray-800">
+                                                <td class="py-3 pr-4">INV-001-23</td>
+                                                <td class="py-3 pr-4">15 Jun 2023</td>
+                                                <td class="py-3 pr-4">A$149.00</td>
+                                                <td class="py-3 pr-4">
+                                                    <span class="px-2 py-1 bg-green-900 text-green-400 rounded-full text-xs">Paid</span>
+                                                </td>
+                                                <td class="py-3">
+                                                    <button class="text-cyan-400 hover:text-cyan-300">
+                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                                        </svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 pr-4">INV-002-23</td>
+                                                <td class="py-3 pr-4">15 May 2023</td>
+                                                <td class="py-3 pr-4">A$149.00</td>
+                                                <td class="py-3 pr-4">
+                                                    <span class="px-2 py-1 bg-green-900 text-green-400 rounded-full text-xs">Paid</span>
+                                                </td>
+                                                <td class="py-3">
+                                                    <button class="text-cyan-400 hover:text-cyan-300">
+                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                                        </svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active classes from all tabs
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('text-cyan-400', 'border-cyan-400');
+                        btn.classList.add('text-gray-400', 'border-transparent');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.remove('text-gray-400', 'border-transparent');
+                    this.classList.add('text-cyan-400', 'border-cyan-400');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show the selected tab content
+                    const targetId = this.id.replace('-tab', '-section');
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+            
+            // Track the current active page in the sidebar
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.flex-col .flex-grow nav a');
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (currentPath.includes(href) && href !== '/pages/dashboard/index.html') {
+                    // Remove active class from dashboard if we're on a subpage
+                    const dashboardLink = document.querySelector('a[href="/pages/dashboard/index.html"]');
+                    if (dashboardLink) {
+                        dashboardLink.classList.remove('text-cyan-400', 'bg-dark-card');
+                        dashboardLink.classList.add('text-gray-400', 'hover:text-cyan-400', 'hover:bg-dark-card');
+                    }
+                    
+                    // Add active class to current page link
+                    link.classList.remove('text-gray-400', 'hover:text-cyan-400', 'hover:bg-dark-card');
+                    link.classList.add('text-cyan-400', 'bg-dark-card');
+                }
+            });
+        });
+    </script>
+
+    <!-- Main JS -->
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/charts.js"></script>
+    
+    <!-- Password visibility toggle script -->
+    <script>
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const eyeIcon = event.currentTarget.querySelector('.password-eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                `;
+            }
+        }
+    </script>
+
+    <!-- JavaScript for loading user data -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load user data from Supabase or localStorage
+        loadUserData();
+    });
+
+    async function loadUserData() {
+        try {
+            // Try to get from Supabase first
+            if (window.supabaseClient) {
+                const { data: { user }, error } = await window.supabaseClient.auth.getUser();
+                
+                if (user) {
+                    // Get the full profile data from Supabase profiles table
+                    const { data: profileData, error: profileError } = await window.supabaseClient
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single();
+                    
+                    if (profileData) {
+                        // Use the full name from profile if available
+                        const firstName = profileData.first_name || '';
+                        const lastName = profileData.last_name || '';
+                        const fullName = firstName && lastName 
+                            ? `${firstName} ${lastName}` 
+                            : (firstName || lastName || user.email);
+                        
+                        // Display the name or email in header
+                        displayUserInfo(fullName);
+                        
+                        // Update user initials based on name or email
+                        updateUserInitials(firstName ? firstName.charAt(0) : user.email.charAt(0));
+                        
+                        // Also update the email field in settings
+                        const emailField = document.getElementById('email');
+                        if (emailField) {
+                            emailField.value = user.email;
+                            emailField.setAttribute('disabled', 'disabled');
+                        }
+                        
+                        return;
+                    } else {
+                        // Fall back to email if profile data not found
+                        displayUserInfo(user.email);
+                        updateUserInitials(user.email);
+                        
+                        // Also update the email field in settings
+                        const emailField = document.getElementById('email');
+                        if (emailField) {
+                            emailField.value = user.email;
+                            emailField.setAttribute('disabled', 'disabled');
+                        }
+                        
+                        return;
+                    }
+                }
+            }
+            
+            // Fallback to checking localStorage
+            const email = localStorage.getItem('userEmail');
+            if (email) {
+                displayUserInfo(email);
+                updateUserInitials(email);
+                
+                // Also update the email field in settings
+                const emailField = document.getElementById('email');
+                if (emailField) {
+                    emailField.value = email;
+                    emailField.setAttribute('disabled', 'disabled');
+                }
+                
+                return;
+            }
+            
+            // If no user data found, show default "Guest User"
+            console.log("No user data found");
+        } catch (error) {
+            console.error("Error loading user data:", error);
+        }
+    }
+
+    function displayUserInfo(fullName) {
+        // Update user name in the header
+        const userName = document.getElementById('user-name-header');
+        if (userName) {
+            userName.textContent = fullName;
+        }
+        
+        // Email display removed to fix triplication issue
+    }
+
+    function updateUserInitials(initial) {
+        // Update user initials in avatar
+        const userInitials = document.querySelectorAll('.user-initial');
+        userInitials.forEach(el => {
+            el.textContent = initial;
+        });
+    }
+    </script>
+
+    <!-- Add the sign out function to the script section at the end of the file -->
+    <script>
+        // Handle sign out using the auth manager
+        function handleSignOut() {
+            try {
+                if (window.authManager) {
+                    // Use auth manager to sign out
+                    window.authManager.signOut();
+                } else {
+                    // Fallback method
+                    if (window.supabaseClient && window.supabaseClient.auth) {
+                        window.supabaseClient.auth.signOut();
+                    }
+                    
+                    // Clear tokens and redirect
+                    localStorage.removeItem('auth_access_token');
+                    localStorage.removeItem('auth_refresh_token');
+                    localStorage.removeItem('auth_issued_at');
+                    
+                    window.location.href = '/pages/login.html';
+                }
+            } catch (error) {
+                console.error('Error signing out:', error);
+                // Redirect anyway
+                window.location.href = '/pages/login.html';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize session status display
+            createSessionTimer();
+            
+            // Load user data if needed
+            // loadUserData();
+        });
+        
+        // Create session timer display
+        function createSessionTimer() {
+            // Create or get the session timer element
+            let sessionTimerElement = document.getElementById('session-timer');
+            
+            if (!sessionTimerElement) {
+                // Create the element if it doesn't exist
+                sessionTimerElement = document.createElement('div');
+                sessionTimerElement.id = 'session-timer';
+                sessionTimerElement.className = 'text-xs text-gray-400 mb-2 flex items-center';
+                
+                // Add it to the page in the user profile section
+                const userProfileSection = document.querySelector('.user-profile-section');
+                if (userProfileSection) {
+                    userProfileSection.appendChild(sessionTimerElement);
+                }
+            }
+            
+            // Update the timer initially
+            updateSessionTimer();
+            
+            // Set interval to update timer every second
+            setInterval(updateSessionTimer, 1000);
+        }
+        
+        // Update session timer
+        function updateSessionTimer() {
+            const sessionTimerElement = document.getElementById('session-timer');
+            
+            if (!sessionTimerElement) return;
+            
+            if (window.authManager) {
+                const timerInfo = window.authManager.getSessionTimerInfo();
+                
+                if (timerInfo) {
+                    // Show session timer info
+                    sessionTimerElement.textContent = timerInfo.message;
+                    sessionTimerElement.style.display = 'block';
+                    
+                    // Add color based on remaining time
+                    if (timerInfo.canAutoLogin) {
+                        if (timerInfo.remainingMinutes < 1) {
+                            sessionTimerElement.className = 'text-xs text-amber-400 mb-2 flex items-center';
+                        } else {
+                            sessionTimerElement.className = 'text-xs text-green-400 mb-2 flex items-center';
+                        }
+                    } else {
+                        sessionTimerElement.className = 'text-xs text-gray-400 mb-2 flex items-center';
+                    }
+                } else {
+                    // Hide timer if no session info
+                    sessionTimerElement.style.display = 'none';
+                }
+            } else {
+                // If auth manager not available
+                sessionTimerElement.textContent = 'Session active';
+                sessionTimerElement.style.display = 'block';
+                sessionTimerElement.className = 'text-xs text-gray-400 mb-2 flex items-center';
+            }
+        }
+    </script>
+</body>
+</html> 

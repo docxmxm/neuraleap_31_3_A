@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@agentdeskai/browser-tools-mcp": "^1.2.0",
+    "@supabase/supabase-js": "^2.49.1"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
