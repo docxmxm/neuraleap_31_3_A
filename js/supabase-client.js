@@ -48,6 +48,17 @@ function initializeSupabaseClient() {
             );
             window.supabaseClient = supabase; // Store for other scripts to use
             
+            // Verify that the client was properly initialized
+            if (!supabase) {
+                console.error('Failed to initialize Supabase client with global supabase.createClient');
+                return false;
+            }
+            
+            console.log('Supabase client initialized successfully with global supabase.createClient');
+            // Dispatch an event to notify that Supabase is ready
+            const event = new CustomEvent('supabase:ready', { detail: { client: supabase } });
+            window.dispatchEvent(event);
+            
             // Attempt automatic login if tokens exist in localStorage
             attemptAutoLogin();
             
@@ -70,6 +81,17 @@ function initializeSupabaseClient() {
             );
             window.supabaseClient = supabase;
             
+            // Verify that the client was properly initialized
+            if (!supabase) {
+                console.error('Failed to initialize Supabase client with standalone createClient');
+                return false;
+            }
+            
+            console.log('Supabase client initialized successfully with standalone createClient');
+            // Dispatch an event to notify that Supabase is ready
+            const event = new CustomEvent('supabase:ready', { detail: { client: supabase } });
+            window.dispatchEvent(event);
+            
             // Attempt automatic login if tokens exist in localStorage
             attemptAutoLogin();
             
@@ -79,6 +101,14 @@ function initializeSupabaseClient() {
         else if (window.supabaseClient) {
             console.log('Using existing supabaseClient');
             supabase = window.supabaseClient;
+            
+            // Verify that the client was properly initialized
+            if (!supabase) {
+                console.error('Failed to initialize Supabase client from existing supabaseClient');
+                return false;
+            }
+            
+            console.log('Supabase client retrieved successfully from existing window.supabaseClient');
             
             // Attempt automatic login if tokens exist in localStorage
             attemptAutoLogin();
@@ -93,35 +123,50 @@ function initializeSupabaseClient() {
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
             script.async = true;
-            script.onload = () => {
-                console.log('Supabase JS library loaded dynamically');
-                // Try again after loading
-                if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
-                    supabase = window.supabase.createClient(
-                        supabaseConfig.supabaseUrl, 
-                        supabaseConfig.supabaseKey,
-                        {
-                            auth: {
-                                autoRefreshToken: true,
-                                persistSession: true,
-                                detectSessionInUrl: true,
-                                flowType: 'pkce'
-                            }
+            
+            return new Promise((resolve) => {
+                script.onload = () => {
+                    console.log('Supabase JS library loaded dynamically');
+                    // Try again after loading
+                    setTimeout(() => {
+                        if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+                            supabase = window.supabase.createClient(
+                                supabaseConfig.supabaseUrl, 
+                                supabaseConfig.supabaseKey,
+                                {
+                                    auth: {
+                                        autoRefreshToken: true,
+                                        persistSession: true,
+                                        detectSessionInUrl: true,
+                                        flowType: 'pkce'
+                                    }
+                                }
+                            );
+                            window.supabaseClient = supabase;
+                            console.log('Supabase client initialized after dynamic loading');
+                            
+                            // Attempt automatic login if tokens exist in localStorage
+                            attemptAutoLogin();
+                            
+                            // Notify that Supabase is ready
+                            const event = new CustomEvent('supabase:ready', { detail: { client: supabase } });
+                            window.dispatchEvent(event);
+                            
+                            resolve(true);
+                        } else {
+                            console.error('Failed to initialize Supabase client after dynamic loading');
+                            resolve(false);
                         }
-                    );
-                    window.supabaseClient = supabase;
-                    console.log('Supabase client initialized after dynamic loading');
-                    
-                    // Attempt automatic login if tokens exist in localStorage
-                    attemptAutoLogin();
-                    
-                    // Notify that Supabase is ready
-                    const event = new CustomEvent('supabase:ready', { detail: { client: supabase } });
-                    window.dispatchEvent(event);
-                }
-            };
-            document.head.appendChild(script);
-            return false;
+                    }, 500);
+                };
+                
+                script.onerror = () => {
+                    console.error('Failed to load Supabase JS library dynamically');
+                    resolve(false);
+                };
+                
+                document.head.appendChild(script);
+            });
         }
     } catch (error) {
         console.error('Error initializing Supabase client:', error);
@@ -203,11 +248,57 @@ function getSupabaseClient() {
     }
     
     // Try to initialize again if it failed the first time
-    if (initializeSupabaseClient()) {
-        return supabase;
-    }
+    console.log('Supabase client not found, attempting to initialize...');
     
-    return null;
+    // Create a promise-based approach for initialization
+    return new Promise(async (resolve) => {
+        try {
+            const result = await initializeSupabaseClient();
+            if (result && supabase) {
+                console.log('Successfully initialized Supabase client on retry');
+                resolve(supabase);
+            } else {
+                console.error('Failed to initialize Supabase client after retry');
+                // Attempt one more time with a forced reload of the library
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                script.async = false; // Use synchronous loading as a final attempt
+                
+                script.onload = () => {
+                    setTimeout(() => {
+                        // Final attempt to initialize
+                        if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+                            supabase = window.supabase.createClient(
+                                supabaseConfig.supabaseUrl, 
+                                supabaseConfig.supabaseKey,
+                                {
+                                    auth: {
+                                        autoRefreshToken: true,
+                                        persistSession: true,
+                                        detectSessionInUrl: true,
+                                        flowType: 'pkce'
+                                    }
+                                }
+                            );
+                            window.supabaseClient = supabase;
+                            resolve(supabase);
+                        } else {
+                            resolve(null);
+                        }
+                    }, 500);
+                };
+                
+                script.onerror = () => {
+                    resolve(null);
+                };
+                
+                document.head.appendChild(script);
+            }
+        } catch (error) {
+            console.error('Error in getSupabaseClient:', error);
+            resolve(null);
+        }
+    });
 }
 
 // Expose to window for debugging and global access

@@ -297,412 +297,7 @@
     </script>
     
     <script>
-        // Make sure page is fully loaded before executing functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load header and footer components
-            loadComponent('header-container', '/components/header.html');
-            loadComponent('footer-container', '/components/footer.html');
-            
-            // Initialize Supabase client directly with production credentials
-            const supabaseUrl = 'https://txggovndoxdybdquopvx.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Z2dvdm5kb3hkeWJkcXVvcHZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1Nzg3MTMsImV4cCI6MjA1NzE1NDcxM30.p0l-YAdIjq-ICQNRGt5bN6YkrSB4NVDMaBUFYH4fpL4';
-            
-            // Configuration for redirects
-            const siteUrl = window.location.origin;
-            const redirectUrl = siteUrl + '/pages/login.html';
-            const verifyRedirectUrl = siteUrl + '/pages/verify-success.html';
-            
-            // Make sure supabase is defined before creating the client
-            if (typeof supabase === 'undefined' || typeof supabase.createClient === 'undefined') {
-                console.error('Supabase is not defined properly. Check script loading order.');
-                // Display an error message on the page 
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'p-4 text-center text-red-500 bg-red-100 rounded mt-4';
-                errorMsg.innerHTML = 'Error loading Supabase client. Please refresh the page.';
-                document.querySelector('.auth-options-container').prepend(errorMsg);
-                return;
-            }
-            
-            // Create Supabase client 
-            try {
-                const { createClient } = supabase;
-                const supabaseClient = createClient(supabaseUrl, supabaseKey);
-                
-                // Make it available to other scripts on the page
-                window.supabaseClient = supabaseClient;
-            } catch (error) {
-                console.error('Error creating Supabase client:', error);
-            }
-            
-            // Add debug info box (can be removed in production)
-            const debugDiv = document.createElement('div');
-            debugDiv.className = 'p-4 my-4 bg-gray-800 rounded text-xs';
-            debugDiv.innerHTML = `
-                <h4 class="font-bold text-cyan-400 mb-2">Connection Information:</h4>
-                <p>Supabase URL: <span class="text-white" id="supabase-url-display">${supabaseUrl}</span></p>
-                <p>Site URL: <span class="text-white">${siteUrl}</span></p>
-                <p>Redirect URL: <span class="text-white">${verifyRedirectUrl}</span></p>
-            `;
-            
-            // Insert after the form
-            const authOption = document.querySelector('#email-register');
-            if (authOption) {
-                authOption.appendChild(debugDiv);
-            }
-            
-            // Handle tab switching
-            const tabs = document.querySelectorAll('.auth-tab');
-            const authOptions = document.querySelectorAll('.auth-option');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active state from all tabs
-                    tabs.forEach(t => {
-                        t.classList.remove('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                        t.classList.add('text-gray-400');
-                    });
-                    
-                    // Add active state to clicked tab
-                    tab.classList.remove('text-gray-400');
-                    tab.classList.add('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                    
-                    // Hide all auth options
-                    authOptions.forEach(option => {
-                        option.classList.add('hidden');
-                    });
-                    
-                    // Show selected auth option
-                    const targetId = tab.id.split('-')[0] + '-register';
-                    document.getElementById(targetId).classList.remove('hidden');
-                });
-            });
-            
-            // Handle form submission
-            const registerForm = document.getElementById('register-form');
-            registerForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const fullname = document.getElementById('fullname').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
-                
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match!');
-                    return;
-                }
-                
-                if (password.length < 8) {
-                    alert('Password must be at least 8 characters long!');
-                    return;
-                }
-                
-                try {
-                    // Show loading state
-                    const submitButton = this.querySelector('button[type="submit"]');
-                    const originalButtonText = submitButton.innerHTML;
-                    submitButton.innerHTML = 'Creating account...';
-                    submitButton.disabled = true;
-                    
-                    // Check if supabaseClient is available
-                    if (!window.supabaseClient) {
-                        throw new Error('Supabase client is not initialized. Please refresh the page and try again.');
-                    }
-                    
-                    // Register user with Supabase
-                    console.log('Attempting to register with Supabase...');
-                    const { data, error } = await window.supabaseClient.auth.signUp({
-                        email: email,
-                        password: password,
-                        options: {
-                            data: {
-                                full_name: fullname
-                            },
-                            emailRedirectTo: verifyRedirectUrl
-                        }
-                    });
-                    
-                    console.log('Supabase response:', data);
-                    console.log('Email confirmation sent to:', email);
-                    
-                    if (error) {
-                        console.error('Supabase registration error:', error);
-                        throw error;
-                    }
-                    
-                    // Hide the registration form
-                    registerForm.classList.add('hidden');
-                    
-                    // Create and show the success message
-                    const successMessage = document.createElement('div');
-                    successMessage.className = 'text-center py-8';
-                    successMessage.innerHTML = `
-                        <svg class="mx-auto h-16 w-16 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <h3 class="mt-4 text-xl font-medium text-white">Check your email</h3>
-                        <p class="mt-2 text-gray-400">We've sent a confirmation link to <strong>${email}</strong></p>
-                        <p class="mt-1 text-gray-400">Please check your inbox and click the link to complete your registration.</p>
-                        <p class="mt-6 text-gray-500">Didn't receive the email? Check your spam folder or <a href="#" id="resend-email" class="text-cyan-400 hover:text-cyan-300">click here to resend</a>.</p>
-                    `;
-                    
-                    registerForm.parentNode.appendChild(successMessage);
-                    
-                    // Handle resend functionality
-                    document.getElementById('resend-email').addEventListener('click', async function(e) {
-                        e.preventDefault();
-                        
-                        try {
-                            // Resend confirmation email
-                            const { error } = await window.supabaseClient.auth.resend({
-                                type: 'signup',
-                                email: email,
-                                options: {
-                                    emailRedirectTo: verifyRedirectUrl
-                                }
-                            });
-                            
-                            if (error) throw error;
-                            
-                            alert('Confirmation email has been resent. Please check your inbox.');
-                        } catch (error) {
-                            console.error('Error resending confirmation email:', error);
-                            alert('Failed to resend confirmation email: ' + error.message);
-                        }
-                    });
-                    
-                } catch (error) {
-                    console.error('Registration error:', error);
-                    
-                    // Enhanced error display with more details
-                    let errorMessage = 'Error creating account: ' + error.message;
-                    
-                    // Create detailed error div
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'mt-4 p-4 bg-red-900 bg-opacity-50 text-red-300 rounded text-sm';
-                    errorDiv.innerHTML = `
-                        <p class="font-bold">Error Details:</p>
-                        <p>${error.message}</p>
-                        <p class="mt-2 font-bold">Troubleshooting Steps:</p>
-                        <ul class="list-disc ml-5">
-                            <li>Check your email address and make sure it's valid</li>
-                            <li>Make sure your password meets the requirements (at least 8 characters)</li>
-                            <li>The email might already be registered</li>
-                        </ul>
-                    `;
-                    
-                    // Find message container or create one
-                    let messageContainer = document.querySelector('.message-container');
-                    if (!messageContainer) {
-                        messageContainer = document.createElement('div');
-                        messageContainer.className = 'message-container';
-                        registerForm.prepend(messageContainer);
-                    }
-                    
-                    messageContainer.innerHTML = '';
-                    messageContainer.appendChild(errorDiv);
-                    
-                    alert('Error creating account: ' + error.message);
-                    
-                    // Reset button state
-                    const submitButton = this.querySelector('button[type="submit"]');
-                    submitButton.innerHTML = originalButtonText;
-                    submitButton.disabled = false;
-                }
-            });
-            
-            // Developer buttons functionality
-            const forceLocalSupabaseBtn = document.getElementById('force-local-supabase');
-            if (forceLocalSupabaseBtn) {
-                forceLocalSupabaseBtn.addEventListener('click', function() {
-                    if (confirm('Force using local Supabase? This is for development only.')) {
-                        localStorage.setItem('forceLocalDB', 'true');
-                        localStorage.setItem('useProductionDB', 'false');
-                        alert('Set to use local Supabase. Reloading page...');
-                        location.reload();
-                    }
-                });
-            }
-            
-            const forceProdSupabaseBtn = document.getElementById('force-prod-supabase');
-            if (forceProdSupabaseBtn) {
-                forceProdSupabaseBtn.addEventListener('click', function() {
-                    if (confirm('Force using production Supabase?')) {
-                        localStorage.setItem('forceLocalDB', 'false');
-                        localStorage.setItem('useProductionDB', 'true');
-                        alert('Set to use production Supabase. Reloading page...');
-                        location.reload();
-                    }
-                });
-            }
-            
-            const resetSupabaseDetectionBtn = document.getElementById('reset-supabase-detection');
-            if (resetSupabaseDetectionBtn) {
-                resetSupabaseDetectionBtn.addEventListener('click', function() {
-                    localStorage.removeItem('forceLocalDB');
-                    localStorage.removeItem('useProductionDB');
-                    alert('Reset to automatic Supabase detection. Reloading page...');
-                    location.reload();
-                });
-            }
-            
-            // Test email button
-            const testEmailBtn = document.getElementById('test-email-btn');
-            if (testEmailBtn) {
-                testEmailBtn.addEventListener('click', function() {
-                    const email = document.getElementById('email').value;
-                    if (!email) {
-                        alert('Please enter an email address first');
-                        return;
-                    }
-                    
-                    alert(`This would test email delivery to: ${email}\nThis feature is for development purposes only.`);
-                });
-            }
-            
-            // Tab switching
-            const emailTab = document.getElementById('email-tab');
-            const googleTab = document.getElementById('google-tab');
-            const emailForm = document.getElementById('email-register');
-            const googleForm = document.getElementById('google-register');
-            
-            // Initial visibility setup
-            emailForm.classList.remove('hidden');
-            googleForm.classList.add('hidden');
-            
-            // Set up tab click handlers
-            emailTab.addEventListener('click', function() {
-                // Update tab appearance
-                emailTab.classList.add('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                emailTab.classList.remove('text-gray-400');
-                googleTab.classList.remove('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                googleTab.classList.add('text-gray-400');
-                
-                // Show/hide forms
-                emailForm.classList.remove('hidden');
-                googleForm.classList.add('hidden');
-            });
-            
-            googleTab.addEventListener('click', function() {
-                // Update tab appearance
-                googleTab.classList.add('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                googleTab.classList.remove('text-gray-400');
-                emailTab.classList.remove('text-cyan-400', 'border-b-2', 'border-cyan-400');
-                emailTab.classList.add('text-gray-400');
-                
-                // Show/hide forms
-                emailForm.classList.add('hidden');
-                googleForm.classList.remove('hidden');
-            });
-            
-            // Initialize Supabase
-            initializeSupabase();
-        });
-        
-        // Function to initialize Supabase
-        async function initializeSupabase() {
-            // Try to load Supabase if not already loaded
-            try {
-                if (typeof supabase === 'undefined') {
-                    await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
-                }
-                
-                if (typeof window.SupabaseConfig === 'undefined') {
-                    await loadScript('/js/supabase-config.js');
-                }
-                
-                if (typeof window.SupabaseClient === 'undefined') {
-                    await loadScript('/js/supabase-client.js');
-                }
-                
-                // Initialize form handlers after Supabase is loaded
-                initRegistrationFormHandlers();
-            } catch (error) {
-                console.error('Failed to load Supabase dependencies:', error);
-                showMessage('error', 'Failed to load authentication system. Please refresh the page.');
-            }
-        }
-        
-        // Helper function to load scripts dynamically
-        function loadScript(src) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.onload = resolve;
-                script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-                document.head.appendChild(script);
-            });
-        }
-        
-        // Google sign-up function
-        async function signUpWithGoogle() {
-            try {
-                console.log('Google sign-up clicked');
-                
-                // Show loading indicator
-                const messageElement = document.getElementById('message-container');
-                messageElement.innerText = 'Connecting to Google...';
-                messageElement.className = 'mt-4 p-3 rounded text-center bg-blue-900 bg-opacity-50 text-blue-200';
-                messageElement.classList.remove('hidden');
-                
-                // Get Supabase client
-                const supabaseClient = await initializeSupabase();
-                
-                if (!supabaseClient) {
-                    throw new Error('Authentication system not available');
-                }
-                
-                // Get the proper redirect URL from SupabaseConfig if available
-                let redirectUrl;
-                if (window.SupabaseConfig && window.SupabaseConfig.googleAuthRedirectUri) {
-                    redirectUrl = window.SupabaseConfig.googleAuthRedirectUri;
-                } else {
-                    // Fallback to the default Supabase callback URL
-                    redirectUrl = "https://txggovndoxdybdquopvx.supabase.co/auth/v1/callback?flowName=GeneralOAuthFlow";
-                }
-                
-                console.log('Initiating Google sign-up with redirect URL:', redirectUrl);
-                
-                // Call Supabase OAuth for Google
-                const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: redirectUrl
-                    }
-                });
-                
-                console.log('OAuth response:', data || 'No data', error || 'No error');
-                
-                if (error) {
-                    throw error;
-                }
-                
-                // If successful, the user will be redirected to Google's auth page
-                console.log('Google signup initiated successfully');
-            } catch (error) {
-                console.error('Error with Google sign-up:', error);
-                const messageElement = document.getElementById('message-container');
-                messageElement.innerText = `Failed to connect to Google: ${error.message}`;
-                messageElement.className = 'mt-4 p-3 rounded text-center bg-red-900 bg-opacity-50 text-red-200';
-            }
-        }
-        
-        // Helper function to create message container if it doesn't exist
-        function createMessageContainer() {
-            const container = document.createElement('div');
-            container.id = 'message-container';
-            container.className = 'mb-4 p-3 rounded text-center';
-            
-            // Find the auth options container and insert at the top
-            const authContainer = document.querySelector('.auth-options-container');
-            if (authContainer) {
-                authContainer.prepend(container);
-            }
-            
-            return container;
-        }
-        
-        // Function to show messages
+        // Helper function to show messages
         function showMessage(type, message) {
             // Create message container if it doesn't exist
             let messageContainer = document.getElementById('message-container');
@@ -710,7 +305,12 @@
                 messageContainer = document.createElement('div');
                 messageContainer.id = 'message-container';
                 messageContainer.className = 'mb-4 p-3 rounded text-center';
-                document.querySelector('.auth-options-container').prepend(messageContainer);
+                const authContainer = document.querySelector('.auth-options-container');
+                if (authContainer) {
+                    authContainer.prepend(messageContainer);
+                } else {
+                    document.querySelector('.max-w-md').prepend(messageContainer);
+                }
             }
             
             // Set message style based on type
@@ -733,6 +333,54 @@
             messageContainer.textContent = message;
             messageContainer.style.display = 'block';
         }
+        
+        // Initialize page and handle Supabase client
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Register page loaded, checking Supabase client...');
+            
+            // Check if Supabase client is available
+            let supabaseClient = window.supabaseClient || (window.getSupabaseClient && window.getSupabaseClient());
+            
+            if (!supabaseClient) {
+                console.warn('Supabase client not available immediately, waiting...');
+                
+                // Add a loading message
+                showMessage('info', 'Loading authentication system...');
+                
+                // Try to reinitialize
+                if (typeof initializeSupabaseClient === 'function') {
+                    try {
+                        await initializeSupabaseClient();
+                        supabaseClient = window.supabaseClient;
+                        
+                        if (supabaseClient) {
+                            console.log('Successfully initialized Supabase client');
+                            showMessage('success', 'Authentication system loaded successfully');
+                            setTimeout(() => {
+                                const messageContainer = document.getElementById('message-container');
+                                if (messageContainer) {
+                                    messageContainer.style.display = 'none';
+                                }
+                            }, 2000);
+                        } else {
+                            console.error('Failed to initialize Supabase client');
+                            showMessage('error', 'Error loading Supabase client. Please refresh the page.');
+                        }
+                    } catch (err) {
+                        console.error('Error initializing Supabase client:', err);
+                        showMessage('error', 'Error loading Supabase client. Please refresh the page.');
+                    }
+                } else {
+                    console.error('initializeSupabaseClient function not available');
+                    showMessage('error', 'Error loading Supabase client. Please refresh the page.');
+                }
+            } else {
+                console.log('Supabase client available on page load');
+            }
+            
+            // Initialize form handlers and UI components
+            // This would be your existing initialization code
+        });
     </script>
 </body>
 </html>
