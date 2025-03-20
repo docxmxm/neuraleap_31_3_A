@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to NeuraLeap</title>
+    <style>
+        /* Email client compatible styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+            background-color: #0a0a14;
+            color: #ffffff;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #171e2e;
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .email-header {
+            background: linear-gradient(135deg, #0d1320, #050a13);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .logo-highlight {
+            color: #22d3ee;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.9);
+        }
+        
+        .email-body {
+            padding: 30px;
+            line-height: 1.6;
+            background-color: #171e2e;
+            color: #f8fafc;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .welcome-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .confirmation-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0891b2, #0369a1);
+            color: white;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.7);
+            transition: all 0.3s ease;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .confirmation-button:hover {
+            background: linear-gradient(135deg, #0891b2, #0284c7);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        .email-footer {
+            background-color: #0d1320;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #ffffff;
+            border-top: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        
+        .highlight-text {
+            color: #22d3ee;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(6, 182, 212, 0.5);
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.7), transparent);
+            margin: 30px 0;
+        }
+        
+        ul {
+            background-color: rgba(0, 0, 0, 0.15);
+            padding: 20px 20px 20px 40px;
+            border-radius: 8px;
+            border-left: 3px solid #22d3ee;
+        }
+        
+        ul li {
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <div class="logo">Neura<span class="logo-highlight">Leap</span></div>
+            <p style="color: #f8fafc; font-weight: 500;">Future-focused AI education platform</p>
+        </div>
+        
+        <div class="email-body">
+            <h1 class="welcome-title">Welcome to NeuraLeap!</h1>
+            
+            <p>Thank you for joining our community of AI learners and innovators. We're excited to have you on board!</p>
+            
+            <p>To complete your registration and activate your account, please confirm your email address by clicking the button below:</p>
+            
+            <div style="text-align: center;">
+                <a href="{{ .ConfirmationURL }}" class="confirmation-button">Confirm Email</a>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <p><strong style="color: white;">Once confirmed, you'll gain access to:</strong></p>
+            <ul>
+                <li>Cutting-edge <span class="highlight-text">AI education resources</span></li>
+                <li>Interactive learning experiences</li>
+                <li>Our supportive community of like-minded learners</li>
+            </ul>
+            
+            <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+            
+            <p style="margin-top: 25px;">Best regards,<br><strong>The <span class="highlight-text">NeuraLeap</span> Team</strong></p>
+        </div>
+        
+        <div class="email-footer">
+            <p>© 2024 NeuraLeap. All rights reserved.</p>
+            <p style="margin-top: 15px; font-size: 12px;">If you didn't create this account, please ignore this email.</p>
+        </div>
+    </div>
+</body>
+</html> 

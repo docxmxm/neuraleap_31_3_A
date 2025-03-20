@@ -138,6 +138,44 @@
             .primary-button {
                 cursor: pointer;
                 -webkit-tap-highlight-color: rgba(0,0,0,0);
+                /* Increase touch target size */
+                padding: 10px !important;
+                min-height: 44px;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /* Fix possible z-index issues */
+                position: relative;
+                z-index: 5;
+            }
+        }
+        
+        /* Additional mobile touch fixes for all devices */
+        @media (max-width: 640px) {
+            /* Ensure all interactive elements have adequate touch targets */
+            button, 
+            a, 
+            .neon-button, 
+            .primary-button,
+            [role="button"],
+            input[type="button"],
+            input[type="submit"] {
+                min-height: 44px;
+                min-width: 44px;
+                /* Fix possible z-index issues */
+                position: relative;
+                z-index: 5;
+            }
+            
+            /* Prevent touch event blocking */
+            .mobile-menu {
+                pointer-events: auto !important;
+            }
+            
+            /* Ensure buttons don't overlap with other elements */
+            .neon-button, .primary-button {
+                margin: 8px 0;
             }
         }
     </style>
@@ -152,6 +190,9 @@
 
     <!-- Auth Redirect Handler for OAuth callbacks -->
     <script src="/js/auth-redirect.js"></script>
+    
+    <!-- Mobile compatibility debugging tool -->
+    <script src="/js/mobile-debug.js"></script>
     
     <!-- Debug hide script -->
     <script>
@@ -172,6 +213,12 @@
                         div.style.display = 'none';
                     }
                 });
+                
+                // Hide the temporary logout button for screenshots
+                const tempLogoutBtn = document.getElementById('temp-logout-btn');
+                if (tempLogoutBtn) {
+                    tempLogoutBtn.style.display = 'none';
+                }
             }, 500);
         });
     </script>
@@ -245,32 +292,12 @@
                 }
             });
             
-            // Add the button to the body
+            // Add the button to the body but hide it (for screenshots)
             document.body.appendChild(logoutBtn);
+            logoutBtn.style.display = 'none'; // Hide by default for screenshots
         });
     </script>
-</head>
-<body class="bg-dark-bg text-white min-h-screen">
-    <!-- Dev Banner -->
-    <!-- 
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6">
-        <div class="container mx-auto">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="mb-3 md:mb-0">
-                    <span class="font-semibold">Development Mode</span> - 
-                    <span class="text-sm">Using Python SimpleHTTPServer - Only client-side auth supported</span>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="/pages/login.html" class="text-white hover:text-indigo-200 underline text-sm">Login Page</a>
-                    <a href="/pages/auth-test.html" class="text-white hover:text-indigo-200 underline text-sm">Auth Test</a>
-                    <a href="/pages/dashboard/index.html" class="text-white hover:text-indigo-200 underline text-sm">Dashboard</a>
-                    <a href="https://github.com/user/NerualLeap-Website" class="text-white hover:text-indigo-200 underline text-sm">GitHub</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-
+    
     <!-- Debugging information -->
     <div id="debug-info" style="position: fixed; top: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.8); color: lime; font-family: monospace; padding: 10px; z-index: 9999; display: none;">
         <div>Debug Information - <button onclick="document.getElementById('debug-info').style.display='none'">Close</button></div>
@@ -1092,6 +1119,107 @@
             });
             
             console.log('Enhanced mobile menu initialized');
+        });
+    </script>
+
+    <!-- Mobile compatibility script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detect mobile device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('Mobile device detected, applying compatibility fixes');
+                
+                // Fix for buttons that might be unclickable
+                const allButtons = document.querySelectorAll('button, a.button, .neon-button, .primary-button, [role="button"], input[type="button"], input[type="submit"]');
+                
+                allButtons.forEach(button => {
+                    // Apply necessary fixes
+                    button.style.position = 'relative';
+                    button.style.zIndex = '10';
+                    button.style.minHeight = '44px';
+                    button.style.minWidth = '44px';
+                    button.style.touchAction = 'manipulation';
+                    
+                    // Add enhanced click handling for iOS and Android
+                    if (!button._mobileFixed) {
+                        button._mobileFixed = true;
+                        
+                        // Create a transparent overlay to improve touch detection
+                        const overlay = document.createElement('div');
+                        overlay.style.position = 'absolute';
+                        overlay.style.top = '-10px';
+                        overlay.style.left = '-10px';
+                        overlay.style.right = '-10px';
+                        overlay.style.bottom = '-10px';
+                        overlay.style.zIndex = '1';
+                        overlay.style.cursor = 'pointer';
+                        overlay.setAttribute('aria-hidden', 'true');
+                        
+                        // Add click forwarder
+                        overlay.addEventListener('touchstart', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            // Trigger the button click
+                            setTimeout(() => {
+                                button.click();
+                            }, 10);
+                        }, {passive: false});
+                        
+                        // Insert overlay only for buttons that might have issues
+                        // Check if the button is likely to have z-index or overlapping issues
+                        const rect = button.getBoundingClientRect();
+                        const elementsAtPoint = document.elementsFromPoint(
+                            rect.left + rect.width / 2, 
+                            rect.top + rect.height / 2
+                        );
+                        
+                        if (elementsAtPoint[0] !== button) {
+                            // Button might be obscured by other elements
+                            button.parentNode.insertBefore(overlay, button);
+                            button.parentNode.style.position = 'relative';
+                            button.style.zIndex = '5';
+                            overlay.style.zIndex = '6';
+                        }
+                    }
+                });
+                
+                // Fix for iOS touch delay
+                const touchableElements = document.querySelectorAll('a, button, input, textarea, [role="button"]');
+                touchableElements.forEach(el => {
+                    if (!el.hasAttribute('data-fastclick')) {
+                        el.setAttribute('data-fastclick', 'true');
+                    }
+                });
+            }
+        });
+    </script>
+    
+    <!-- Clean up debugging UI elements for screenshots -->
+    <script>
+        // Hide any debugging UI elements for clean screenshots
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide the mobile debug toggle button if it exists
+            const debugToggle = document.getElementById('mobile-debug-toggle');
+            if (debugToggle) {
+                debugToggle.style.display = 'none';
+            }
+            
+            // Hide the mobile debug panel if it exists
+            const debugPanel = document.getElementById('mobile-debug-panel');
+            if (debugPanel) {
+                debugPanel.style.display = 'none';
+            }
+            
+            // Hide any other debug elements that might be present
+            const allDebugElements = document.querySelectorAll('[id*="debug"], [class*="debug"], [id*="test"], #temp-logout-btn');
+            allDebugElements.forEach(el => {
+                if (el) {
+                    el.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Phone Compatibility Test - NeuraLeap</title>
+    <meta name="description" content="Test page for mobile device compatibility with NeuraLeap platform">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/animations.css" rel="stylesheet">
+    
+    <!-- Test page specific styles -->
+    <style>
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 0.5rem;
+        }
+        
+        .test-section h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+        
+        .device-info {
+            background: var(--dark-card);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.pass {
+            background-color: #10B981;
+            color: white;
+        }
+        
+        .status-badge.fail {
+            background-color: #EF4444;
+            color: white;
+        }
+        
+        .status-badge.pending {
+            background-color: #F59E0B;
+            color: white;
+        }
+        
+        .touch-test-area {
+            height: 150px;
+            border: 2px dashed var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .gesture-area {
+            height: 200px;
+            border: 2px dashed var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gesture-dot {
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .result-card {
+            background: var(--dark-card);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        /* Form test elements */
+        .form-test input, 
+        .form-test select, 
+        .form-test textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.375rem;
+            color: white;
+        }
+        
+        .form-test textarea {
+            min-height: 100px;
+        }
+        
+        /* Mobile orientation specific */
+        @media screen and (orientation: portrait) {
+            .orientation-badge.portrait {
+                display: inline-flex;
+            }
+            .orientation-badge.landscape {
+                display: none;
+            }
+        }
+        
+        @media screen and (orientation: landscape) {
+            .orientation-badge.portrait {
+                display: none;
+            }
+            .orientation-badge.landscape {
+                display: inline-flex;
+            }
+        }
+        
+        /* Fixed elements test */
+        .test-fixed-element {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px var(--neon-glow);
+            z-index: 100;
+        }
+    </style>
+
+    <!-- Load components.js first to ensure its functions are available -->
+    <script src="/js/components.js"></script>
+    
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+</head>
+<body class="bg-gray-900">
+    <div class="neural-bg"></div>
+    
+    <!-- Header component will be loaded by components.js -->
+    <div id="header-container"></div>
+
+    <!-- Page content -->
+    <main class="container mx-auto px-4 py-8 mb-20">
+        <h1 class="text-3xl font-bold mb-6 text-center neon-text">Phone Compatibility Test Page</h1>
+        <p class="text-center mb-8">This page helps test various mobile compatibility aspects of the NeuraLeap platform.</p>
+        
+        <!-- Device Info Section -->
+        <div class="device-info" id="device-info">
+            <h3 class="text-xl font-semibold mb-3 neon-text">Device Information</h3>
+            <div id="device-details" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p><strong>Screen Width:</strong> <span id="screen-width">Loading...</span></p>
+                <p><strong>Screen Height:</strong> <span id="screen-height">Loading...</span></p>
+                <p><strong>Device Pixel Ratio:</strong> <span id="pixel-ratio">Loading...</span></p>
+                <p><strong>User Agent:</strong> <span id="user-agent">Loading...</span></p>
+                <p><strong>Orientation:</strong> 
+                    <span class="orientation-badge portrait status-badge pass">Portrait</span>
+                    <span class="orientation-badge landscape status-badge pass">Landscape</span>
+                </p>
+                <p><strong>Touch Support:</strong> <span id="touch-support">Checking...</span></p>
+            </div>
+        </div>
+        
+        <!-- Touch Test Section -->
+        <div class="test-section">
+            <h3 class="text-xl font-semibold">Touch Interaction Test</h3>
+            <p class="mb-4">Tap, double tap, long press, or swipe in the area below to test touch interactions.</p>
+            
+            <div class="touch-test-area" id="touch-test-area">
+                <p>Interact with this area</p>
+                <p id="touch-status">No touch detected yet</p>
+            </div>
+            
+            <div class="result-card">
+                <h4 class="font-medium mb-2">Last Touch Event:</h4>
+                <p id="touch-result">None</p>
+            </div>
+        </div>
+        
+        <!-- Gesture Test Section -->
+        <div class="test-section">
+            <h3 class="text-xl font-semibold">Gesture Support Test</h3>
+            <p class="mb-4">Try pinch zoom, rotate, and swipe gestures in the area below.</p>
+            
+            <div class="gesture-area" id="gesture-area">
+                <div class="gesture-dot" id="gesture-dot"></div>
+            </div>
+            
+            <div class="result-card">
+                <h4 class="font-medium mb-2">Gesture Detected:</h4>
+                <p id="gesture-result">None</p>
+            </div>
+        </div>
+        
+        <!-- Form Elements Test -->
+        <div class="test-section">
+            <h3 class="text-xl font-semibold">Form Elements Test</h3>
+            <p class="mb-4">Test how form elements behave on your device.</p>
+            
+            <form class="form-test">
+                <div class="mb-4">
+                    <label class="block mb-2">Text Input</label>
+                    <input type="text" placeholder="Enter some text">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Email Input</label>
+                    <input type="email" placeholder="Enter your email">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Number Input</label>
+                    <input type="number" placeholder="Enter a number">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Select Dropdown</label>
+                    <select>
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Date Picker</label>
+                    <input type="date">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Textarea</label>
+                    <textarea placeholder="Enter multiple lines of text"></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2">
+                        Checkbox test
+                    </label>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Radio Buttons</label>
+                    <div>
+                        <label class="flex items-center mb-2">
+                            <input type="radio" name="radio-test" class="mr-2">
+                            Option A
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="radio-test" class="mr-2">
+                            Option B
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="button" class="neon-button w-full">Submit Test Form</button>
+            </form>
+        </div>
+        
+        <!-- Buttons and Interaction Test -->
+        <div class="test-section">
+            <h3 class="text-xl font-semibold">Button & Interaction Test</h3>
+            <p class="mb-4">Test various button types and interactions.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <button class="primary-button">Primary Button</button>
+                <button class="neon-button">Neon Button</button>
+                <button class="bg-gray-700 text-white px-4 py-2 rounded-md">Basic Button</button>
+                <button class="border border-cyan-500 text-cyan-500 px-4 py-2 rounded-md">Outline Button</button>
+            </div>
+            
+            <div class="card-bg p-4 mb-6">
+                <h4 class="font-medium mb-2">Interactive Card</h4>
+                <p>This card should have hover effects.</p>
+            </div>
+            
+            <div class="interactive-card p-4">
+                <h4 class="font-medium mb-2">Special Interactive Card</h4>
+                <p>This card has more complex hover effects.</p>
+            </div>
+        </div>
+        
+        <!-- Scrolling Performance Test -->
+        <div class="test-section">
+            <h3 class="text-xl font-semibold">Scrolling Performance Test</h3>
+            <p class="mb-4">Scroll through these items to test scrolling performance.</p>
+            
+            <div class="h-80 overflow-y-auto bg-gray-800 rounded-lg p-4">
+                <div class="space-y-4">
+                    <!-- Generate 20 test items -->
+                    <div class="card-bg p-3 flex items-center">
+                        <div class="h-10 w-10 rounded-full bg-cyan-500 mr-3 flex-shrink-0"></div>
+                        <div>
+                            <h4 class="font-medium">Test Item 1</h4>
+                            <p class="text-sm text-gray-400">This is a test item to check scrolling performance</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Repeat similar items (simplified representation) -->
+                    <div class="card-bg p-3">Test item 2 with longer content for testing purposes</div>
+                    <div class="card-bg p-3">Test item 3 with even more content to ensure proper scrolling test</div>
+                    <div class="card-bg p-3">Test item 4 with content</div>
+                    <div class="card-bg p-3">Test item 5 with content</div>
+                    <div class="card-bg p-3">Test item 6 with content</div>
+                    <div class="card-bg p-3">Test item 7 with content</div>
+                    <div class="card-bg p-3">Test item 8 with content</div>
+                    <div class="card-bg p-3">Test item 9 with content</div>
+                    <div class="card-bg p-3">Test item 10 with content</div>
+                    <div class="card-bg p-3">Test item 11 with content</div>
+                    <div class="card-bg p-3">Test item 12 with content</div>
+                    <div class="card-bg p-3">Test item 13 with content</div>
+                    <div class="card-bg p-3">Test item 14 with content</div>
+                    <div class="card-bg p-3">Test item 15 with content</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Media Test -->
+        <div class="test-section">
+            <h3 class="text-xl font-semibold">Media Test</h3>
+            <p class="mb-4">Test how images and videos display on mobile.</p>
+            
+            <div class="mb-6">
+                <h4 class="font-medium mb-2">Image Display Test</h4>
+                <img src="https://placehold.co/600x400/06b6d4/FFFFFF/png?text=Test+Image" 
+                     alt="Test image" 
+                     class="w-full rounded-lg">
+            </div>
+            
+            <div>
+                <h4 class="font-medium mb-2">Video Display Test</h4>
+                <video controls class="w-full rounded-lg">
+                    <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        
+        <!-- Fixed position element for testing -->
+        <div class="test-fixed-element" id="test-fixed">↑</div>
+    </main>
+    
+    <!-- Footer component will be loaded by components.js -->
+    <div id="footer-container"></div>
+    
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display device information
+            const screenWidth = document.getElementById('screen-width');
+            const screenHeight = document.getElementById('screen-height');
+            const pixelRatio = document.getElementById('pixel-ratio');
+            const userAgent = document.getElementById('user-agent');
+            const touchSupport = document.getElementById('touch-support');
+            
+            screenWidth.textContent = window.innerWidth + 'px';
+            screenHeight.textContent = window.innerHeight + 'px';
+            pixelRatio.textContent = window.devicePixelRatio;
+            userAgent.textContent = navigator.userAgent;
+            
+            // Check for touch support
+            if ('ontouchstart' in window) {
+                touchSupport.textContent = 'Supported';
+                touchSupport.classList.add('text-green-400');
+            } else {
+                touchSupport.textContent = 'Not supported';
+                touchSupport.classList.add('text-red-400');
+            }
+            
+            // Update orientation display when orientation changes
+            window.addEventListener('orientationchange', function() {
+                screenWidth.textContent = window.innerWidth + 'px';
+                screenHeight.textContent = window.innerHeight + 'px';
+            });
+            
+            // Touch test
+            const touchArea = document.getElementById('touch-test-area');
+            const touchStatus = document.getElementById('touch-status');
+            const touchResult = document.getElementById('touch-result');
+            
+            let touchTimeout;
+            let lastTouchTime = 0;
+            
+            touchArea.addEventListener('touchstart', function(e) {
+                touchStatus.textContent = 'Touch detected!';
+                
+                // Detect double tap
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTouchTime;
+                
+                clearTimeout(touchTimeout);
+                
+                if (tapLength < 300 && tapLength > 0) {
+                    touchResult.textContent = 'Double tap detected!';
+                    e.preventDefault();
+                } else {
+                    touchTimeout = setTimeout(function() {
+                        touchResult.textContent = 'Single tap detected!';
+                    }, 300);
+                }
+                lastTouchTime = currentTime;
+            });
+            
+            touchArea.addEventListener('touchmove', function(e) {
+                touchStatus.textContent = 'Touch move detected!';
+                touchResult.textContent = `Touch move: ${e.touches[0].clientX}, ${e.touches[0].clientY}`;
+                // Prevent scrolling when touching this element
+                // e.preventDefault();
+            });
+            
+            touchArea.addEventListener('touchend', function() {
+                touchStatus.textContent = 'Touch ended!';
+            });
+            
+            touchArea.addEventListener('touchcancel', function() {
+                touchStatus.textContent = 'Touch cancelled!';
+            });
+            
+            // Gesture test
+            const gestureArea = document.getElementById('gesture-area');
+            const gestureDot = document.getElementById('gesture-dot');
+            const gestureResult = document.getElementById('gesture-result');
+            
+            let initialDistance = 0;
+            let initialAngle = 0;
+            let initialX = 0;
+            let initialY = 0;
+            
+            gestureArea.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 2) {
+                    initialDistance = getDistance(e.touches[0], e.touches[1]);
+                    initialAngle = getAngle(e.touches[0], e.touches[1]);
+                    gestureResult.textContent = 'Two finger touch detected';
+                } else if (e.touches.length === 1) {
+                    initialX = e.touches[0].clientX;
+                    initialY = e.touches[0].clientY;
+                    gestureDot.style.left = initialX + 'px';
+                    gestureDot.style.top = initialY + 'px';
+                    gestureResult.textContent = 'Touch detected';
+                }
+            });
+            
+            gestureArea.addEventListener('touchmove', function(e) {
+                e.preventDefault(); // Prevent scrolling
+                
+                if (e.touches.length === 2) {
+                    // Pinch gesture detection
+                    const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                    const scaleFactor = currentDistance / initialDistance;
+                    
+                    // Rotation detection
+                    const currentAngle = getAngle(e.touches[0], e.touches[1]);
+                    const rotation = currentAngle - initialAngle;
+                    
+                    if (Math.abs(scaleFactor - 1) > 0.1) {
+                        if (scaleFactor > 1) {
+                            gestureResult.textContent = 'Pinch out (zoom in) detected';
+                            gestureDot.style.transform = `translate(-50%, -50%) scale(${Math.min(2, scaleFactor)})`;
+                        } else {
+                            gestureResult.textContent = 'Pinch in (zoom out) detected';
+                            gestureDot.style.transform = `translate(-50%, -50%) scale(${Math.max(0.5, scaleFactor)})`;
+                        }
+                    } 
+                    else if (Math.abs(rotation) > 10) {
+                        gestureResult.textContent = `Rotation detected: ${Math.round(rotation)}°`;
+                        gestureDot.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                    }
+                } 
+                else if (e.touches.length === 1) {
+                    // Swipe detection
+                    const currentX = e.touches[0].clientX;
+                    const currentY = e.touches[0].clientY;
+                    
+                    gestureDot.style.left = `${currentX}px`;
+                    gestureDot.style.top = `${currentY}px`;
+                    
+                    const diffX = currentX - initialX;
+                    const diffY = currentY - initialY;
+                    
+                    if (Math.abs(diffX) > 20 || Math.abs(diffY) > 20) {
+                        if (Math.abs(diffX) > Math.abs(diffY)) {
+                            gestureResult.textContent = diffX > 0 ? 'Swipe right' : 'Swipe left';
+                        } else {
+                            gestureResult.textContent = diffY > 0 ? 'Swipe down' : 'Swipe up';
+                        }
+                    }
+                }
+            });
+            
+            gestureArea.addEventListener('touchend', function() {
+                // Reset gesture dot
+                setTimeout(() => {
+                    gestureDot.style.transform = 'translate(-50%, -50%)';
+                }, 500);
+            });
+            
+            // Helper functions for gesture detection
+            function getDistance(touch1, touch2) {
+                const dx = touch1.clientX - touch2.clientX;
+                const dy = touch1.clientY - touch2.clientY;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+            
+            function getAngle(touch1, touch2) {
+                return Math.atan2(
+                    touch2.clientY - touch1.clientY,
+                    touch2.clientX - touch1.clientX
+                ) * 180 / Math.PI;
+            }
+            
+            // Fixed element test
+            const fixedButton = document.getElementById('test-fixed');
+            fixedButton.addEventListener('click', function() {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+            
+            // Update screen dimensions on resize
+            window.addEventListener('resize', function() {
+                screenWidth.textContent = window.innerWidth + 'px';
+                screenHeight.textContent = window.innerHeight + 'px';
+            });
+        });
+    </script>
+</body>
+</html> 

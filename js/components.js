@@ -102,25 +102,77 @@ async function loadComponent(componentName, containerId, callback) {
                 const mobileMenu = document.getElementById('mobile-menu');
                 
                 if (mobileMenuButton && mobileMenu) {
-                    mobileMenuButton.addEventListener('click', function() {
+                    // Remove any existing event listeners first to avoid duplicates
+                    mobileMenuButton.removeEventListener('click', toggleMobileMenu);
+                    
+                    // Improved event handling for mobile devices
+                    if ('ontouchstart' in window) {
+                        // For touch devices
+                        mobileMenuButton.addEventListener('touchstart', function(e) {
+                            e.preventDefault(); // Prevent default behavior
+                            toggleMobileMenu();
+                        }, {passive: false});
+                    } else {
+                        // For non-touch devices
+                        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+                    }
+                    
+                    // Function to toggle mobile menu
+                    function toggleMobileMenu() {
                         mobileMenu.classList.toggle('hidden');
-                    });
+                        
+                        // Update ARIA attributes for accessibility
+                        const expanded = !mobileMenu.classList.contains('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', expanded.toString());
+                        
+                        // Add visual feedback
+                        if (expanded) {
+                            mobileMenuButton.classList.add('text-cyan-400');
+                        } else {
+                            mobileMenuButton.classList.remove('text-cyan-400');
+                        }
+                    }
                 }
                 
                 // Initialize dropdowns if needed
                 const dropdownToggles = container.querySelectorAll('.dropdown-toggle');
                 
                 dropdownToggles.forEach(toggle => {
-                    toggle.addEventListener('click', function(e) {
+                    // Remove any existing click listeners
+                    toggle.removeEventListener('click', handleDropdownToggle);
+                    
+                    // Improved event handling for touch devices
+                    if ('ontouchstart' in window) {
+                        toggle.addEventListener('touchstart', function(e) {
+                            e.preventDefault();
+                            handleDropdownToggle.call(this, e);
+                        }, {passive: false});
+                    } else {
+                        toggle.addEventListener('click', handleDropdownToggle);
+                    }
+                    
+                    function handleDropdownToggle(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         
                         // Toggle dropdown menu
                         const dropdownMenu = this.nextElementSibling;
                         if (dropdownMenu) {
+                            // Close other dropdowns first
+                            container.querySelectorAll('.dropdown-menu:not(.hidden)').forEach(menu => {
+                                if (menu !== dropdownMenu) {
+                                    menu.classList.add('hidden');
+                                }
+                            });
+                            
+                            // Toggle this dropdown
                             dropdownMenu.classList.toggle('hidden');
+                            
+                            // Update ARIA attributes
+                            this.setAttribute('aria-expanded', 
+                                !dropdownMenu.classList.contains('hidden').toString());
                         }
-                    });
+                    }
                 });
             }
             

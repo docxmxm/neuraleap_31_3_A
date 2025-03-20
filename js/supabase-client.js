@@ -588,6 +588,11 @@ const SupabaseProfile = {
 window.SupabaseAuth = SupabaseAuth;
 window.SupabaseProfile = SupabaseProfile;
 
+// Also expose individual functions directly for easier access
+window.signUp = signUp;
+window.signIn = signIn;
+window.signOut = signOut;
+
 // Listen for DOMContentLoaded to verify connection
 document.addEventListener('DOMContentLoaded', () => {
     // Verify connection on page load

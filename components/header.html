@@ -336,8 +336,45 @@
         const mobileMenu = document.getElementById('mobile-menu');
         
         if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', function() {
+            // Remove any existing listeners to prevent duplication
+            const newButton = mobileMenuButton.cloneNode(true);
+            if (mobileMenuButton.parentNode) {
+                mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
+            }
+            
+            // Function to toggle the mobile menu
+            function toggleMobileMenu(e) {
+                if (e) e.preventDefault();
                 mobileMenu.classList.toggle('hidden');
+                
+                // Toggle aria-expanded for accessibility
+                const expanded = !mobileMenu.classList.contains('hidden');
+                newButton.setAttribute('aria-expanded', expanded.toString());
+                
+                // Add visual feedback
+                if (expanded) {
+                    newButton.classList.add('text-cyan-400');
+                } else {
+                    newButton.classList.remove('text-cyan-400');
+                }
+            }
+            
+            // Add appropriate event listeners based on device capabilities
+            if ('ontouchstart' in window) {
+                newButton.addEventListener('touchstart', toggleMobileMenu, {passive: false});
+            } else {
+                newButton.addEventListener('click', toggleMobileMenu);
+            }
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.classList.contains('hidden') && 
+                    !e.target.closest('#mobile-menu') && 
+                    !e.target.closest('#mobile-menu-button')) {
+                    mobileMenu.classList.add('hidden');
+                    newButton.setAttribute('aria-expanded', 'false');
+                    newButton.classList.remove('text-cyan-400');
+                }
             });
         }
         
@@ -349,18 +386,47 @@
             const menu = dropdown.querySelector('.mobile-dropdown-menu');
             
             if (button && menu) {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
+                // Clone the button to remove existing listeners
+                const newDropdownButton = button.cloneNode(true);
+                if (button.parentNode) {
+                    button.parentNode.replaceChild(newDropdownButton, button);
+                }
+                
+                // Function to toggle the dropdown
+                function toggleDropdown(e) {
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                    
+                    // Close other dropdowns first
+                    document.querySelectorAll('.mobile-dropdown-menu').forEach(m => {
+                        if (m !== menu && !m.classList.contains('hidden')) {
+                            m.classList.add('hidden');
+                        }
+                    });
+                    
                     menu.classList.toggle('hidden');
                     
                     // Toggle arrow direction
-                    const arrow = button.querySelector('svg');
+                    const arrow = newDropdownButton.querySelector('svg');
                     if (arrow) {
                         arrow.style.transform = menu.classList.contains('hidden') 
                             ? 'rotate(0deg)' 
                             : 'rotate(180deg)';
                     }
-                });
+                    
+                    // Update ARIA attributes
+                    newDropdownButton.setAttribute('aria-expanded', 
+                        !menu.classList.contains('hidden').toString());
+                }
+                
+                // Add appropriate event listeners based on device capabilities
+                if ('ontouchstart' in window) {
+                    newDropdownButton.addEventListener('touchstart', toggleDropdown, {passive: false});
+                } else {
+                    newDropdownButton.addEventListener('click', toggleDropdown);
+                }
             }
         });
     });

@@ -179,6 +179,66 @@ body {
     .desktop-menu {
         display: none;
     }
+    
+    /* Ensure all buttons are clickable */
+    button, 
+    a.button, 
+    .neon-button, 
+    .primary-button, 
+    input[type="button"], 
+    input[type="submit"], 
+    [role="button"] {
+        /* Make buttons more tappable on mobile */
+        min-height: 44px;
+        min-width: 44px;
+        
+        /* Fix z-index issues */
+        position: relative;
+        z-index: 10;
+        
+        /* Ensure touch events work properly */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        
+        /* Add proper spacing between buttons */
+        margin: 0.5rem 0;
+    }
+    
+    /* Fix for buttons inside containers with overflow */
+    .card-bg button,
+    .interactive-card button,
+    .dropdown-menu button,
+    .mobile-dropdown-menu button {
+        /* Ensure visibility */
+        z-index: 15;
+    }
+    
+    /* Fix for elements with negative z-index that might block buttons */
+    .neural-bg,
+    [class*="bg-"],
+    [class*="background"] {
+        z-index: -5 !important;
+    }
+    
+    /* Ensure dropdown menus don't get hidden behind other elements */
+    .dropdown-menu,
+    .mobile-dropdown-menu {
+        z-index: 20;
+    }
+    
+    /* Fix iOS-specific issues */
+    @supports (-webkit-touch-callout: none) {
+        /* Additional iOS fixes */
+        button, 
+        a.button, 
+        .neon-button, 
+        .primary-button {
+            cursor: pointer;
+            /* Fix click-through issues on iOS */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+    }
 }
 
 @media (min-width: 769px) {
@@ -661,4 +721,31 @@ body {
 @keyframes data-stream {
     0% { transform: translateY(-100%) }
     100% { transform: translateY(100%) }
+}
+
+/* Specific fix for mobile menu buttons */
+@media (max-width: 640px) {
+    #mobile-menu-button,
+    .mobile-menu-button,
+    [id*="mobile-menu-button"] {
+        z-index: 50;
+        position: relative;
+    }
+    
+    /* Fixed elements that might overlap buttons */
+    .fixed, 
+    .sticky, 
+    [class*="fixed-"], 
+    [class*="sticky-"] {
+        /* Ensure they don't block interaction with elements beneath */
+        pointer-events: none;
+    }
+    
+    /* But allow interaction with children of fixed elements */
+    .fixed *, 
+    .sticky *, 
+    [class*="fixed-"] *, 
+    [class*="sticky-"] * {
+        pointer-events: auto;
+    }
 }
