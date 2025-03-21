@@ -4,7 +4,8 @@
   "description": "NeuraLeap Website",
   "scripts": {
     "dev": "serve .",
-    "start": "serve ."
+    "start": "serve .",
+    "build": "cp -r * dist/ || true"
   },
   "dependencies": {
     "serve": "^14.2.1"
