@@ -597,4 +597,4 @@ window.signOut = signOut;
 document.addEventListener('DOMContentLoaded', () => {
     // Verify connection on page load
     setTimeout(verifySupabaseConfig, 1000);
-}); 
+});

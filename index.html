@@ -213,91 +213,31 @@
                         div.style.display = 'none';
                     }
                 });
-                
-                // Hide the temporary logout button for screenshots
-                const tempLogoutBtn = document.getElementById('temp-logout-btn');
-                if (tempLogoutBtn) {
-                    tempLogoutBtn.style.display = 'none';
-                }
             }, 500);
         });
     </script>
-    
-    <!-- Temporary Logout Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add a logout button
-            const logoutBtn = document.createElement('button');
-            logoutBtn.className = 'fixed top-20 right-4 z-50 neon-button px-4 py-2 rounded-lg';
-            logoutBtn.textContent = 'Force Logout';
-            logoutBtn.id = 'temp-logout-btn';
-            
-            // Add logout functionality
-            logoutBtn.addEventListener('click', async function() {
-                try {
-                    console.log("Attempting to log out...");
-                    
-                    // Try all possible methods to log out
-                    if (window.supabase && window.supabase.auth) {
-                        console.log("Using window.supabase.auth.signOut()");
-                        await window.supabase.auth.signOut();
-                    }
-                    
-                    if (window.supabaseClient && window.supabaseClient.auth) {
-                        console.log("Using window.supabaseClient.auth.signOut()");
-                        await window.supabaseClient.auth.signOut();
-                    }
-                    
-                    if (typeof signOut === 'function') {
-                        console.log("Using signOut()");
-                        await signOut();
-                    }
-                    
-                    // Clear ALL Supabase-related items from localStorage
-                    console.log("Clearing localStorage items...");
-                    
-                    // Get all keys in localStorage
-                    const keysToRemove = [];
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key && (
-                            key.includes('supabase') || 
-                            key.includes('sb-') || 
-                            key.includes('auth') || 
-                            key.includes('token')
-                        )) {
-                            keysToRemove.push(key);
-                        }
-                    }
-                    
-                    // Remove all matching keys
-                    keysToRemove.forEach(key => {
-                        console.log(`Removing localStorage key: ${key}`);
-                        localStorage.removeItem(key);
-                    });
-                    
-                    // Also clear all cookies
-                    document.cookie.split(";").forEach(function(c) {
-                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                    });
-                    
-                    // Show success message
-                    alert('You have been forcefully logged out! The page will now reload.');
-                    
-                    // Hard reload by changing location
-                    window.location.href = "/";
-                } catch (error) {
-                    console.error('Logout error:', error);
-                    alert('Error during logout: ' + (error.message || 'Unknown error'));
-                }
-            });
-            
-            // Add the button to the body but hide it (for screenshots)
-            document.body.appendChild(logoutBtn);
-            logoutBtn.style.display = 'none'; // Hide by default for screenshots
-        });
-    </script>
-    
+</head>
+<body class="bg-dark-bg text-white min-h-screen">
+    <!-- Dev Banner -->
+    <!-- 
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-3 md:mb-0">
+                    <span class="font-semibold">Development Mode</span> - 
+                    <span class="text-sm">Using Python SimpleHTTPServer - Only client-side auth supported</span>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/pages/login.html" class="text-white hover:text-indigo-200 underline text-sm">Login Page</a>
+                    <a href="/pages/auth-test.html" class="text-white hover:text-indigo-200 underline text-sm">Auth Test</a>
+                    <a href="/pages/dashboard/index.html" class="text-white hover:text-indigo-200 underline text-sm">Dashboard</a>
+                    <a href="https://github.com/user/NerualLeap-Website" class="text-white hover:text-indigo-200 underline text-sm">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+
     <!-- Debugging information -->
     <div id="debug-info" style="position: fixed; top: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.8); color: lime; font-family: monospace; padding: 10px; z-index: 9999; display: none;">
         <div>Debug Information - <button onclick="document.getElementById('debug-info').style.display='none'">Close</button></div>
@@ -1194,32 +1134,6 @@
                     }
                 });
             }
-        });
-    </script>
-    
-    <!-- Clean up debugging UI elements for screenshots -->
-    <script>
-        // Hide any debugging UI elements for clean screenshots
-        document.addEventListener('DOMContentLoaded', function() {
-            // Hide the mobile debug toggle button if it exists
-            const debugToggle = document.getElementById('mobile-debug-toggle');
-            if (debugToggle) {
-                debugToggle.style.display = 'none';
-            }
-            
-            // Hide the mobile debug panel if it exists
-            const debugPanel = document.getElementById('mobile-debug-panel');
-            if (debugPanel) {
-                debugPanel.style.display = 'none';
-            }
-            
-            // Hide any other debug elements that might be present
-            const allDebugElements = document.querySelectorAll('[id*="debug"], [class*="debug"], [id*="test"], #temp-logout-btn');
-            allDebugElements.forEach(el => {
-                if (el) {
-                    el.style.display = 'none';
-                }
-            });
         });
     </script>
 </body>
