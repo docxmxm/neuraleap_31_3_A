@@ -282,7 +282,7 @@
                     <div class="card-bg rounded-xl overflow-hidden group relative">
                         
                             <div class="h-64 bg-gradient-to-br from-blue-900 to-purple-800 flex items-center justify-center overflow-hidden">
-                                <img src="/Our staff/Zhe Luo (Roi)/Zhe Luo (Roi).jpeg" alt="Zhe Luo (Roi)" class="object-contain h-56 w-auto max-w-full mx-auto">
+                                <img src="/assets/images/team/zhe-luo.jpeg" alt="Zhe Luo (Roi)" class="object-contain h-56 w-auto max-w-full mx-auto" onerror="this.style.display='none'; var fallback = document.createElement('div'); fallback.className='w-32 h-32 rounded-full bg-blue-800 flex items-center justify-center text-4xl font-bold text-white'; fallback.textContent='ZL'; this.parentNode.appendChild(fallback);">
                             </div>
 
                             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-t from-black via-black/70 to-transparent flex items-center justify-center transition-all duration-300 ease-in-out">
@@ -321,7 +321,7 @@
                     <div class="card-bg rounded-xl overflow-hidden group relative">
                         
                             <div class="h-64 bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center overflow-hidden">
-                                <img src="/Our staff/Xing Zi (Shane)/Xing Zi (Shane).jpeg" alt="Xing Zi (Shane)" class="object-contain h-56 w-auto max-w-full mx-auto">
+                                <img src="/assets/images/team/xing-zi.jpeg" alt="Xing Zi (Shane)" class="object-contain h-56 w-auto max-w-full mx-auto" onerror="this.style.display='none'; var fallback = document.createElement('div'); fallback.className='w-32 h-32 rounded-full bg-purple-800 flex items-center justify-center text-4xl font-bold text-white'; fallback.textContent='XZ'; this.parentNode.appendChild(fallback);">
                             </div>
 
                             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-t from-black via-black/70 to-transparent flex items-center justify-center transition-all duration-300 ease-in-out">
@@ -360,7 +360,7 @@
                     <div class="card-bg rounded-xl overflow-hidden group relative">
                         
                             <div class="h-64 bg-gradient-to-br from-blue-900 to-blue-800 flex items-center justify-center overflow-hidden">
-                                <img src="/Our staff/Tianyi Ma (Today)/Tianyi Ma (Today).jpeg" alt="Tianyi Ma (Today)" class="object-contain h-56 w-auto max-w-full mx-auto">
+                                <img src="/assets/images/team/tianyi-ma.jpeg" alt="Tianyi Ma (Today)" class="object-contain h-56 w-auto max-w-full mx-auto" onerror="this.style.display='none'; var fallback = document.createElement('div'); fallback.className='w-32 h-32 rounded-full bg-cyan-800 flex items-center justify-center text-4xl font-bold text-white'; fallback.textContent='TM'; this.parentNode.appendChild(fallback);">
                             </div>
 
                             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-t from-black via-black/70 to-transparent flex items-center justify-center transition-all duration-300 ease-in-out">
@@ -840,7 +840,7 @@
     <!-- Footer -->
     <div id="footer-container"></div>
 
-    <!-- JavaScript -->
+    <!-- Scripts -->
     <script src="/js/main.js"></script>
     <script>
         // Load components
@@ -886,7 +886,42 @@
             .then(data => {
                 document.getElementById('footer-container').innerHTML = data;
             });
+
+        // Handle global image errors
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add global image error handler
+            const handleImageError = function(event) {
+                const img = event.target;
+                if (img.tagName !== 'IMG') return;
+                
+                // Extract initials from alt text or use fallback
+                let initials = 'NA';
+                if (img.alt) {
+                    const nameParts = img.alt.split(' ');
+                    if (nameParts.length >= 2) {
+                        initials = nameParts[0][0] + nameParts[nameParts.length-1][0];
+                    } else if (nameParts.length === 1) {
+                        initials = nameParts[0].substring(0, 2);
+                    }
+                }
+                
+                // Create a colored fallback with initials
+                img.style.display = 'none';
+                const colors = ['blue', 'purple', 'cyan', 'indigo', 'emerald'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                const fallback = document.createElement('div');
+                fallback.className = `w-32 h-32 rounded-full bg-${randomColor}-800 flex items-center justify-center text-4xl font-bold text-white`;
+                fallback.textContent = initials;
+                img.parentNode.appendChild(fallback);
+            };
             
+            // Add attribute to all images so we don't need to add it to each one individually
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', handleImageError);
+            });
+        });
+        
         // 标签切换功能
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.about-tab');
