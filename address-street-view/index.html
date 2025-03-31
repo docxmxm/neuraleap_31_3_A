@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Street View - NeuraLeap</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- First load our app script to define initialize function -->
+    <script src="js/app.js"></script>
+    <style>
+        .back-link {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 1000;
+        }
+        
+        .back-link:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <a href="/pages/about-us/" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to NeuraLeap
+    </a>
+    
+    <div class="app-container">
+        <header>
+            <h1><i class="fas fa-map-marked-alt"></i> Address Street View Finder</h1>
+        </header>
+        
+        <div id="error-message" class="error-message" aria-live="polite"></div>
+        
+        <section class="main-content">
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            id="address-input" 
+                            placeholder="Enter address to view on map..." 
+                            aria-label="Enter address"
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button id="search-btn" class="btn primary-btn" aria-label="Search address">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <div id="autocomplete-container" class="autocomplete-container"></div>
+            </div>
+            
+            <div class="views-wrapper">
+                <div class="view-container">
+                    <div class="view-header">
+                        <h2><i class="fas fa-map"></i> Map View</h2>
+                    </div>
+                    <div id="map" class="map-container" aria-label="Google Map"></div>
+                </div>
+                <div class="view-container">
+                    <div class="view-header">
+                        <h2><i class="fas fa-street-view"></i> Street View</h2>
+                    </div>
+                    <div id="pano" class="pano-container" aria-label="Google Street View"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="download-section">
+            <h2><i class="fas fa-download"></i> Download Options</h2>
+            
+            <div class="download-options">
+                <div class="download-path">
+                    <label for="file-prefix">File Organization:</label>
+                    <div class="file-path-input">
+                        <input 
+                            type="text" 
+                            id="file-prefix" 
+                            placeholder="Optional: folder/subfolder/filename-prefix"
+                            aria-label="File prefix or structure"
+                        >
+                        <button id="clear-prefix" class="btn icon-btn" aria-label="Clear file prefix">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <p class="help-text">
+                        Add optional prefix to organize files. Example: "vacations/hawaii/" will save as "vacations_hawaii_streetview.jpg"
+                    </p>
+                </div>
+                
+                <div class="download-mode">
+                    <label for="auto-download">Download Mode:</label>
+                    <div class="toggle-container">
+                        <span>Manual</span>
+                        <label class="switch">
+                            <input type="checkbox" id="auto-download">
+                            <span class="slider round"></span>
+                        </label>
+                        <span>Automatic</span>
+                    </div>
+                    <p class="help-text">When enabled, Street View images will be saved automatically after searching an address</p>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button id="download-btn" disabled class="btn success-btn" aria-label="Download Street View image">
+                    <i class="fas fa-download"></i> Download Street View Image
+                </button>
+            </div>
+        </section>
+        
+        <section class="guide-section">
+            <h2><i class="fas fa-book"></i> Path Commands Guide</h2>
+            <div class="guide-content">
+                <div class="guide-item">
+                    <h3>Getting the Current Path</h3>
+                    <p>To get the current path for your downloads:</p>
+                    <ol>
+                        <li>Open your terminal or command prompt</li>
+                        <li>Navigate to your downloads folder</li>
+                        <li>Type <code>pwd</code> (Print Working Directory) and press Enter</li>
+                        <li>Copy the displayed path</li>
+                    </ol>
+                    <div class="command-example">
+                        <code>$ pwd</code>
+                        <code class="output">/Users/username/Downloads</code>
+                    </div>
+                </div>
+                
+                <div class="guide-item">
+                    <h3>Using the Path</h3>
+                    <p>Once you have the path:</p>
+                    <ol>
+                        <li>Copy the path from your terminal</li>
+                        <li>Paste it into the "File Organization" field</li>
+                        <li>Add any additional subfolders if needed</li>
+                    </ol>
+                    <div class="tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <p>Tip: You can add subfolders by using forward slashes. Example: <code>vacation/hawaii</code></p>
+                    </div>
+                </div>
+                
+                <div class="guide-item">
+                    <h3>Common Path Examples</h3>
+                    <ul>
+                        <li><code>work/screenshots</code> - Creates work_screenshots prefix</li>
+                        <li><code>vacation/2024/hawaii</code> - Creates vacation_2024_hawaii prefix</li>
+                        <li><code>real-estate/listings</code> - Creates real-estate_listings prefix</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <div class="info-panel">
+            <div class="note">
+                <i class="fas fa-info-circle"></i>
+                <p>Street View images will be downloaded to your default download folder. For the best results, make sure the address is precise.</p>
+            </div>
+        </div>
+        
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p>Processing your request...</p>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Address Street View Finder</p>
+        </footer>
+    </div>
+    
+    <!-- Load Google Maps API after our application script -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAT9WDCZ3WobE2lYq1JmpH8fWbopQgNUcU&libraries=geometry,places&callback=initialize">
+    </script>
+</body>
+</html> 

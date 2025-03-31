@@ -1,0 +1,22 @@
+{
+  "name": "address-street-view",
+  "version": "1.0.0",
+  "description": "A web application to view and download Google Street View images for addresses",
+  "main": "index.html",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "google",
+    "maps",
+    "street-view",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/google.maps": "^3.53.4",
+    "typescript": "^5.0.0"
+  }
+} 
